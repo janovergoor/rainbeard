@@ -15,10 +15,12 @@ Rainbeard is based on Django 1.3.
 
 To run the test suite, you should also have the following software installed:
 * pytidylib - http://countergram.com/open-source/pytidylib
+* coverage.py - http://nedbatchelder.com/code/coverage/
 * django test_coverage - http://opensource.55minutes.com/
 
 Installing these should be as easy as:
 easy_install pytidylib
+easy_install coverage
 svn co http://opensource.55minutes.com/svn/python/trunk/django/apps/test_coverage/
 
 Installation
