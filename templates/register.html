@@ -1,0 +1,39 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>RainBeard - Register</title>
+    <link href="{% get_static_prefix %}actfour/actfour.css" rel="stylesheet" type="text/css"/>
+    <link href="{% get_static_prefix %}rainbeard.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery-ui-1.8.13.custom.min.js"></script>
+    <style type="text/css">
+      #wrapper {width: 360px; margin: 0px auto; margin-top: 50px;}
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function() {$('input:submit').button();});
+    </script>
+  </head>
+  <body class="ui-widget">
+    <div id="header">
+      <img src="{% get_static_prefix %}rainbeard.png" alt="rainbeard">
+    </div>
+    <div id="wrapper" class="ui-widget-content ui-corner-all container">
+      <div class="ui-widget-header ui-corner-all heading cold">
+        Register
+      </div>
+      <div class="content">
+        <form action="/register" method="post">
+          <table summary="Registration Form">
+            {{ form.as_table }}
+            <tr>
+              <td></td>
+              <td><input type="submit" value="Register"></td>
+            </tr>
+          </table>
+        </form>
+        Already have an account? <a href="/login">Log in</a>.
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>RainBeard</title>
+    <link href="{% get_static_prefix %}rainbeard.css" rel="stylesheet" type="text/css"/>
+    <link href="{% get_static_prefix %}actfour/actfour.css" rel="stylesheet" type="text/css"/>
+    <link href="{% get_static_prefix %}main.css" rel="stylesheet" type="text/css"/>
+    <link href='http://fonts.googleapis.com/css?family=Slackey' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery-ui-1.8.13.custom.min.js"></script>
+    <script type="text/javascript" src="{% get_static_prefix %}main.js"></script>
+  </head>
+  <body class="ui-widget">
+    <div id="topbar">
+      <span class="topbar-elem">Logged in as {{username}}</span><span class="topbar-elem"><a href="/logout">Log Out</a></span>
+    </div>
+    <div id="header">
+      <img src="{% get_static_prefix %}rainbeard.png" alt="rainbeard">
+    </div>
+    <div id="centercontent">
+      <input type="text" id="searchbox" value="">
+      <div class="hiddenbox ui-widget-content ui-corner-all" id="resultbox">
+      </div>
+    </div>
+  </body>
+</html>

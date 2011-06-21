@@ -1,0 +1,81 @@
+/* Common CSS for RainBeard */
+
+body {
+  background-color: white;
+  word-wrap: break-word;
+}
+
+#header {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.hiddenbox {
+  display: none;
+}
+
+.container {
+  padding: 0.2em;
+}
+
+.heading {
+  padding: 0.2em;
+}
+
+.content {
+  padding: 0.2em;
+}
+
+.cold {
+  background: #004d8b;
+  color: white;
+}
+
+.hot {
+  background: #f5e14d;
+  color: black;
+}
+
+form {
+  margin: 10px;
+}
+
+/* Align form labels with their respective boxes */
+form th label {
+  float: right;
+}
+
+/* Keep the labels wide enough. */
+form th {
+  white-space: nowrap;
+}
+
+form .errorlist {
+  font-size: 9pt;
+  color: red;
+  list-style-type: none;
+  margin-left: 0px;
+  padding-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#topbar {
+  font-size: 12px;
+  text-align: right;
+}
+
+.topbar-elem {
+  padding-left: 5px;
+  padding-right: 5px;
+  border-left: 1px solid black;
+}
+
+.topbar-elem:first-child {
+  border-left: none;
+}
+
+/* Get rid of that annoying outline. */
+.ui-slider-handle {
+  outline: none;
+}

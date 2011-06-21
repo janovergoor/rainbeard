@@ -1,0 +1,63 @@
+/* CSS for main.html */
+
+/* make the body take up the entire screen. */
+body {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+
+#centercontent {
+  margin-top: 40px;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+
+#searchbox {
+  width: 98%;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+#resultbox {
+  width: 100%;
+}
+
+#queryframe {
+  position: absolute;
+  top: 200px;
+  left: 10%;
+  right: 10%;
+  width: 80%;
+  min-width: 800px;
+  height: 500px;
+}
+
+.result {
+  padding: 5px;
+  min-height: 50px;
+  cursor: default;
+  color: black;
+  background-color: #FAF0A6;
+}
+
+.result-selected {
+  background-color: #4D82AE;
+  color: white;
+}
+
+.result-pic {
+  float: left;
+  margin-right: 5px;
+}
+
+.result-handle {
+  font-weight: bold;
+  display: block;
+}
+
+.result-service {
+  font-size: 0.8em;
+}

@@ -1,0 +1,75 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>RainBeard</title>
+    <link href="{% get_static_prefix %}rainbeard.css" rel="stylesheet" type="text/css"/>
+    <link href="{% get_static_prefix %}actfour/actfour.css" rel="stylesheet" type="text/css"/>
+    <link href="{% get_static_prefix %}query.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery.sortElements.js"></script>
+    <script type="text/javascript" src="{% get_static_prefix %}jquery-ui-1.8.13.custom.min.js"></script>
+    <script type="text/javascript">
+      window.gContext = {service: '{{ service }}', handle: '{{ handle }}' };
+    </script>
+    <script type="text/javascript" src="{% get_static_prefix %}query.js"></script>
+  </head>
+  <body class="ui-widget">
+    <div id="summary">
+      <div id="leftinfo">
+        <img id="profilepic" src="{{ picsrc }}" alt="profile picture">
+      </div>
+      <div id="rightinfo" class="ui-widget-content ui-corner-all container">
+        <div class="ui-widget-header ui-corner-all heading">
+          Ellery Wulczyn
+        </div>
+        <div class="content">
+          Some info.
+        </div>
+      </div>
+    </div>
+
+    <div id="popup" class="ui-widget-content ui-corner-all">
+      <div id="popup-header">
+        How strongly do you feel about this?
+      </div>
+      <div id="popup-text"></div>
+      <div id="popup-slider"></div>
+    </div>
+
+    <div id="data">
+
+      <!-- List of different tabs for the data pane. -->
+      <ul>
+        <li><a href="#tab-recon">What Others Say</a></li>
+        <li><a href="#tab-input">What I Say</a></li>
+      </ul>
+
+
+      <div id="tab-recon">
+        Recon not yet implemented.
+      </div>
+      <div id="tab-input">
+
+        <div id="suggestedtags-container" class="ui-widget-content ui-corner-all container">
+          <div class="ui-widget-header ui-corner-all heading cold">
+            Suggested Tags
+          </div>
+          <div id="suggestedtags" class="content tagbox">
+          </div>
+        </div>
+        <div id="giventags-container" class="ui-widget-content ui-corner-all container">
+          <div class="ui-widget-header ui-corner-all heading hot">
+            Tags for Ellery
+          </div>
+          <div id="giventags" class="content tagbox">
+          </div>
+        </div>
+
+        <div id="input-footer"></div>
+      </div>
+
+    </div>
+
+  </body>
+</html>

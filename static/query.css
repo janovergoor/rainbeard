@@ -1,0 +1,118 @@
+#summary {
+  min-height: 170px;
+}
+
+#leftinfo {
+  float: left;
+  margin-top: 10px;
+  width: 15%;
+}
+
+#rightinfo {
+  float: right;
+  margin-left: 10px;
+  margin-top: 10px;
+  min-height: 145px;
+  width: 68%;
+}
+
+#link-none,
+#link-edit,
+#link-display {
+  clear: both;
+  display: none;
+}
+
+#link-none {
+  border: solid;
+  border-width: 1px;
+  border-color: black;
+  background-color: #FFFFCC;
+  margin-top: 100px;
+  text-align: center;
+  cursor: default;
+}
+
+#link-none:hover {
+  border-width: 2px;
+}
+
+#link-edit {
+  display:block;
+}
+
+#suggestedtags-container {
+  float: left;
+  display: inline;
+  width: 25%;
+  text-align: center;
+  cursor: default;
+}
+
+#suggestedtags {
+  text-align: left;
+}
+
+#giventags-container {
+  float: right;
+  display: inline;
+  width: 70%;
+  text-align: center;
+  cursor: default;
+}
+
+#input-footer {
+  clear: both;
+  display: block;
+}
+
+#popup {
+  position: absolute;
+  left: 400px;
+  top: 210px;
+  width: 350px;
+  height: 80px;
+  z-index: 2;
+  background: #FDFAE0;
+  border: 1px solid black;
+  display: none;
+  padding: 10px;
+}
+
+#popup-header {
+  font-weight: bold;
+}
+
+#popup-text {
+  margin: 10px;
+  text-align: center;
+  font-size: 80%;
+  font-style: italic;
+}
+
+.tagbox {
+  /* This is the size to which the tag cloud %'s are relative. */
+  font-size: 13pt;
+}
+
+.tag {
+  cursor: move;
+  display: inline;
+  padding: 0.4em 0.4em;
+  -moz-user-select: none;
+}
+
+.hiddentag {
+  display: none;
+}
+
+.given {
+  color: green;
+}
+.suggested {
+  color: #666666;
+}
+
+.dragover {
+  background: #eeeeee;
+}
