@@ -123,28 +123,38 @@ class PendingClaim(AbstractAgent):
 
 #
 #
-# Connection in the social graph. This is a focal point for tags, as well as
-# other link-related information.
+# Confidant relationships.
+#
+# Confidants relationships are always bidirectional. Alice cannot receive
+# information from Bob unless she's willing to share information with him
+# too. However, each person may set the propagation coefficient on
+# information flowing from the other. As such, we represent each confidant
+# relationship as two separate objects, and maintain the invariant that they
+# must exist in pairs.
+#
+# TODO: add validation for the above invariant
 #
 #
-class Connection(models.Model):
+class ConfidantLink(models.Model):
 
-  # The source of a connection must be a Profile, since a user has to
-  # register with us before adding outgoing connections.
-  src = models.ForeignKey(Profile)
-
-  # The destination might be out-of-network, so we use Agents here
-  dst = models.ForeignKey(Agent)
-
-  # Name the source gives to the destination. May be blank
-  name_given = models.CharField(max_length=100)
-
-  # Is src a confidant of dst?
-  is_confidant = models.BooleanField(default=False)
+  # The source and destination of a confidant link are both Identity objects.
+  src = models.ForeignKey(Identity, related_name='confidant_out_links')
+  dst = models.ForeignKey(Identity, related_name='confidant_in_links')
 
   # Propagation coefficient - how much does information through this link
-  # propagate? Invalid if is_confidant is false.
+  # propagate?
   prop_coef = models.PositiveSmallIntegerField(validators=[validate_prop_coef])
+
+#
+#
+# Set of tags placed on an identity.
+#
+#
+class TagSet(models.Model):
+
+  # The tagger and target are both Identity objects.
+  tagger = models.ForeignKey(Identity, related_name='tagsets_by')
+  target = models.ForeignKey(Identity, related_name='tagsets_for')
 
 #
 #
@@ -159,5 +169,5 @@ class Tag(models.Model):
   # Confidence given to the tag
   confidence = models.PositiveSmallIntegerField(validators=[validate_confidence])
 
-  # Connection this tag corresponds to
-  connection = models.ForeignKey(Connection)
+  # TagSet this tag corresponds to
+  tagset = models.ForeignKey(TagSet)
