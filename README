@@ -106,3 +106,21 @@ Any and all new code must have complete test coverage. Bug fixes should include
 tests that fail without the fix. Nothing will be considered without tests. They
 may be a pain to write, but they give you the peace of mind to know that your
 hard work won't be broken later on when something else changes.
+
+Please avoid combining many unrelated changes into a single changeset. If you're
+using git for development, it's very easy to create separate branches for each
+logically separate unit of change. If you find yourself working on a feature and
+then spotting an unrelated bug, don't just fix the bug in the current branch.
+Instead, do the following (assuming we're currently on branch my_feature_branch):
+
+
+$ git stash                        # Save your current uncommited changes
+$ git checkout -b my_fix_branch    # Create a new branch to hold your bugfix
+$ ...hack...hack....
+$ git commit                        # Commit your bugfix
+$ git checkout my_feature_branch    # Return to your feature branch
+$ git stash pop                     # Restore your working tree
+
+This works great assuming that my_feature doesn't depend on my_fix. If it does,
+you'll need to use rebase. See this page for more information:
+http://kernel.org/pub/software/scm/git/docs/git-rebase.html
