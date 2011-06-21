@@ -1,0 +1,108 @@
+Overview
+========
+
+Rainbeard is a next-generation trust network based on the principles of local
+trust. See http://raincode.org/ for details on how it work.
+
+Rainbeard is licensed under the GNU AGPL v3.
+
+The current maintainer is: Bobby Holley <bobbyholley@gmail.com>
+
+Dependencies
+============
+
+Rainbeard is based on Django 1.3.
+
+To run the test suite, you should also have the following software installed:
+* pytidylib - http://countergram.com/open-source/pytidylib
+* django test_coverage - http://opensource.55minutes.com/
+
+Installing these should be as easy as:
+easy_install pytidylib
+svn co http://opensource.55minutes.com/svn/python/trunk/django/apps/test_coverage/
+
+Installation
+============
+
+Rainbeard is designed to have a one-to-one relationship with the site - that is
+to say, it may not coexist well with other apps.
+
+The following steps should get you up and running:
+
+1 - Create your django project and check out the rainbeard code
+
+$ cd /my/code
+$ django-admin.py startproject rainsite
+$ cd rainsite
+$ git clone git://github.com/bholley/rainbeard.git
+
+2 - Edit settings.py
+
+First configure your database. Sqlite is probably fine for
+non-stresstest development. Add /my/code/rainsite to the TEMPLATE_DIRS list.
+Next, comment out the CSRF middleware (this will be fixed before the first
+release). Then, add 'rainbeard' to INSTALLED_APPS. Finally, at the bottom of
+the file, add:
+
+from rainbeard.settings import *
+
+3 - Edit urls.py
+
+Add the following line to the top of the file:
+
+from rainbeard.urls import urls as rainbeard_urls
+
+Add the following line to your url patterns:
+
+url(r'', include(rainbeard_urls))
+
+You may also wish to enable the django admin interface. See this page for more
+information: https://docs.djangoproject.com/en/dev/intro/tutorial02/
+
+4 - Populate the database
+
+$ ./manage.py syncdb
+
+You'll be asked to create a superuser. Go ahead and do that.
+
+5 - Run the tests
+
+$ ./manage.py test rainbeard
+
+They should all pass.
+
+6 - Generate a code coverage report
+
+Check out the test_coverage app (mentioned above) into your rainsite directory.
+Add 'test_coverage' to your list of INSTALLED_APPS in settings.py. At the bottom
+of settings.py, add the following lines:
+
+from test_coverage.settings import *
+COVERAGE_REPORT_HTML_OUTPUT_DIR = '/where/i/want/the/coverage_report'
+
+Make sure you create the directory where the coverage report will be placed. If
+you don't, it will throw an exception.
+
+$ ./manage.py test_coverage rainbeard
+
+This should generate a code coverage report for you to inspect.
+
+7 - Run the test server!
+
+$ ./manage.py runserver
+
+
+Development
+===========
+
+Code contributions are welcome. As always, it's best to check with the
+maintainer to make sure you're on the same page before putting a lot of work
+into a feature.
+
+Git-style patches and GitHub pull requests are equally acceptable ways to submit
+code. Both should be directed to the maintainer.
+
+Any and all new code must have complete test coverage. Bug fixes should include
+tests that fail without the fix. Nothing will be considered without tests. They
+may be a pain to write, but they give you the peace of mind to know that your
+hard work won't be broken later on when something else changes.
