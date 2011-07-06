@@ -14,3 +14,9 @@ def make_user(name, password=None, email=None):
   user = account.register_user(name, password, email, False)
   account.do_claim(PendingClaim.objects.get(claimer=user.get_profile()).ckey)
   return User.objects.get(username=name)
+
+# Dumps the database in JSON format in an external file
+# NB: is possibly obsolete and can be done in a nicer fashion
+def dump_database():
+  from os import system
+  os.system("./manage.py dumpdata > dbcontent.json")
