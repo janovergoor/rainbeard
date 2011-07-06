@@ -11,7 +11,7 @@ def make_user(name, password=None, email=None):
     """
     Utility to generate and activate a user.
 
-    Returns the User object for the created user
+    Returns the User object for the created user.
     """
     if not password:
         password = name + 'pass'
@@ -20,3 +20,11 @@ def make_user(name, password=None, email=None):
     user = account.register_user(name, password, email, False)
     account.do_claim(PendingClaim.objects.get(claimer=user.get_profile()).ckey)
     return User.objects.get(username=name)
+
+
+def dump_database():
+    """
+    Dumps the database in JSON format in an external file.
+    """
+    from os import system
+    os.system("./manage.py dumpdata > dbcontent.json")

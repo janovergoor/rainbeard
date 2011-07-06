@@ -45,9 +45,10 @@ $ git clone git://github.com/bholley/rainbeard.git
 
 First configure your database. Sqlite is probably fine for all development that
 doesn't involve performance testing. After setting up the database, add
-/my/code/rainsite to the TEMPLATE_DIRS list. Next, comment out the CSRF
-middleware (this will be fixed before the first release). Then, add 'rainbeard'
-to INSTALLED_APPS. Finally, at the bottom of the file, add:
+/my/code/rainsite to the TEMPLATE_DIRS list and /my/code/test/fixtures to the
+FIXTURE_DIRS list. Next, comment out the CSRF middleware (this will be fixed
+before the first release). Then, add 'rainbeard' to INSTALLED_APPS. Finally, at 
+the bottom of the file, add:
 
 from rainbeard.settings import *
 

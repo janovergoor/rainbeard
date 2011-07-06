@@ -1,0 +1,52 @@
+
+[
+	{
+		"model": "rainbeard.Face",
+		"pk": 1,
+		"fields": {
+			"label": "Andi",
+			"owner": "1",
+			"is_active": true
+		}
+	},
+	
+	{
+		"model": "rainbeard.Face",
+		"pk": 2,
+		"fields": {
+			"label": "Ben",
+			"owner": "2",
+			"is_active": true
+		}
+	},
+	
+	{
+		"model": "rainbeard.Face",
+		"pk": 3,
+		"fields": {
+			"label": "Chris",
+			"owner": "3",
+			"is_active": true
+		}
+	},
+	
+	{
+		"model": "rainbeard.Face",
+		"pk": 4,
+		"fields": {
+			"label": "Dan",
+			"owner": "4",
+			"is_active": true
+		}
+	},
+	
+	{
+		"model": "rainbeard.Face",
+		"pk": 5,
+		"fields": {
+			"label": "Ellery",
+			"owner": "5",
+			"is_active": true
+		}
+	}
+]

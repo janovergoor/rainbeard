@@ -1,28 +1,22 @@
 """Confidant network query unit tests."""
 
 from unittest import TestLoader, TestSuite
-
 from django.test import TestCase
 
-from rainbeard import query
 from rainbeard.models import *
+from rainbeard import query
 import util
 
 
 class SimpleQueryTestcase(TestCase):
+    fixtures = ['identities.json', 'tags.json']
 
     def setUp(self):
 
-        # Create two basic user accounts with email addresses.
-        self.alice = util.make_user('alice')
-        self.bob = util.make_user('bob')
-
-    def test_basic(self):
-
-        # Verify the dummy query, for now.
-        results = query.do_query(self.alice.get_profile().active_face(),
-                                 self.bob.get_profile().active_face())
-        self.assertEqual(results['reliable'], 0.5)
+        # Dummy query, for now.
+        results = query.do_query(Face.objects.get(label='Andi'),
+                                 Face.objects.get(label='Ben'))
+        self.assertEqual(results['Nice'], 5)
 
 
 def suite():
