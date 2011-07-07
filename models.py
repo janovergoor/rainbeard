@@ -174,3 +174,63 @@ class Tag(models.Model):
 
   # TagSet this tag corresponds to
   tagset = models.ForeignKey(TagSet)
+
+
+#
+#
+# In-memory representation of the confidant network. Can be read as a 
+# user x user matrix, where the (i,j)th value is the confidence that 
+# user i has in user j. The value is 0 when there is no relation between
+# them.
+#
+# NB: This implementation assumes that the user id are given out in 
+# sequence and consist of integers, starting with 0.
+# NB: This implementation optimizes the lookup of high confidant links
+# but is less effective in terms of adding links and looking up specific links
+#
+#
+class ConfidantNetwork(models.Model):
+  
+  # The network itself, start with empty first elemet
+  network = [0]
+  
+  # Adds a link from src to dst with the given weight
+  def add_link(self, src, dst, weight):
+    # check if the user is already present in the confidant network  
+    if len(self.network) > 1 and len(self.network) - 1 >= src:
+      # find the location of the biggest link that is smaller than weight
+      id = 0
+      while (id < len(self.network[src])) and (weight < self.network[src][id][0]):
+        id =+ 1
+      self.network[src].insert(id,(weight,dst))
+    # otherwise this is the first confidant link for this user
+    else:
+      self.network.append([(weight, dst)])
+
+  # Returns the weight of the link if there is a confidence relation,
+  # or 0 when there is none.
+  def get_link(self, src, dst):
+    # check if the src user is present in the network
+    if len(self.network) >= src:
+      # iterate over src'es links
+      for link in self.network[src]:
+        # return weight if dst is in src'es links
+        if link[1] == dst:
+          return link[0]
+    # otherwise, if src is not present or dst is not in src'es link
+    return 0
+    
+  # Returns an enumerator which containts the confidents of the input
+  # user, ordered by the confidance that it has in them.
+  def get_confidants(self, src):
+    return self.network[src]  # TODO: should be an enumerator?
+
+  # Prints out the confidant network
+  def print_out(self):
+    print "\nState of the network:"
+    for x in range(1,len(self.network)):
+      print x, ":", 
+      for y in self.network[x]:
+        print '(%d,%.2f)' % (y[1], y[0]), 
+      print ""
+

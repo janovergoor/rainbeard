@@ -14,3 +14,9 @@ def make_user(name, password=None, email=None):
   user = account.register_user(name, password, email, False)
   account.do_claim(PendingClaim.objects.get(claimer=user.get_profile()).ckey)
   return User.objects.get(username=name)
+
+def apply_tag(tagger, target, tag, weight):
+  tagset = TagSet(tagger=tagger, target=target)
+  tagset.save()
+  tag = Tag(name=tag, confidence=weight, tagset=tagset)
+  tag.save()
