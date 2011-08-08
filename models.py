@@ -156,6 +156,9 @@ class TagSet(models.Model):
   tagger = models.ForeignKey(Identity, related_name='tagsets_by')
   target = models.ForeignKey(Identity, related_name='tagsets_for')
 
+  class Meta:
+    unique_together = (('tagger', 'target'))
+
 #
 #
 # Tag given in a relation.
