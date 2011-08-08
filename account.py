@@ -21,13 +21,12 @@ def register_user(username, password, email, send_email=True):
   profile = Profile(user=user)
   profile.save()
 
-  # Create the default identity. This starts active.
-  identity = Identity(label='default', profile=profile, is_active=True)
-  identity.save()
+  # Create the default face. This starts active.
+  face = Face(label='default', profile=profile, is_active=True)
+  face.save()
 
   # Request a claim on the email address
-  request_claim(identity, handle=email, service='email',
-                quiet=(not send_email))
+  request_claim(face, handle=email, service='email', quiet=(not send_email))
 
   return user
 
@@ -35,7 +34,7 @@ def register_user(username, password, email, send_email=True):
 # Requests to claim. Returns the claim object if one is created, None otherwise.
 #
 # The caller should verify that the agent has not already been claimed
-def request_claim(identity, handle, service, quiet=False):
+def request_claim(face, handle, service, quiet=False):
 
   # Make sure the agent is in the database
   agent, created = Agent.objects.get_or_create(handle=handle, service=service)
@@ -45,12 +44,12 @@ def request_claim(identity, handle, service, quiet=False):
     raise Exception('Trying to claim agent that already has an owner!')
 
   # If there's already a pending claim for us, don't do anything
-  if PendingClaim.objects.filter(owner=identity, handle=handle,
+  if PendingClaim.objects.filter(owner=face, handle=handle,
                                  service=service).count() != 0:
     return None
 
   # Add a pending claim
-  claim = PendingClaim(owner=identity, handle=handle, service=service)
+  claim = PendingClaim(owner=face, handle=handle, service=service)
   claim.save()
 
   # We don't handle sending the message yet
@@ -74,21 +73,21 @@ def do_claim(ckey):
     return None
 
   # Copy the relevant data for convenience
-  (handle, service, identity) = (claim.handle, claim.service, claim.owner)
+  (handle, service, face) = (claim.handle, claim.service, claim.owner)
 
   # There should already be an agent if there are pending claims. Find it
   # and set the owner
   agent = Agent.objects.get(handle=handle, service=service)
-  agent.owner = identity
+  agent.owner = face
   agent.save()
 
   # Delete all pending claims to this agent
   PendingClaim.objects.filter(handle=handle, service=service).delete()
 
   # If this is the email account waiting for user activation, activate
-  if service == 'email' and handle == identity.profile.user.email:
-    identity.profile.user.is_active = True
-    identity.profile.user.save()
+  if service == 'email' and handle == face.profile.user.email:
+    face.profile.user.is_active = True
+    face.profile.user.save()
 
   # All done
   return agent

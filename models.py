@@ -15,19 +15,19 @@ class Profile(models.Model):
   # Magic entry to link this with django's internal user table
   user = models.OneToOneField(User)
 
-  # Gets the active identity
-  def active_identity(self):
-    return Identity.objects.get(profile=self, is_active=True)
+  # Gets the active face
+  def active_face(self):
+    return Face.objects.get(profile=self, is_active=True)
 
 
 #
 #
-# Identity for a user who has registered with us. A user may have multiple
-# separate identity if they wish to keep certain agents distinct from each
+# Face for a user who has registered with us. A user may have multiple
+# separate faces if they wish to keep certain agents distinct from each
 # other.
 #
 #
-class Identity(models.Model):
+class Face(models.Model):
 
   # Identifier
   label = models.CharField(max_length=20)
@@ -35,19 +35,19 @@ class Identity(models.Model):
   # Which user do we belong to?
   profile = models.ForeignKey(Profile)
 
-  # Is this identity active?
+  # Is this face active?
   is_active = models.BooleanField(default=False)
 
-  # Activates this identity, deactivating the currently active identity
+  # Activates this face, deactivating the currently active face
   def activate(self):
 
     # Already active? No-op.
     if self.is_active:
       return
 
-    # There should be exactly one active identity if we're calling activate.
+    # There should be exactly one active face if we're calling activate.
     # get() will throw an exception if anything else is the case.
-    old = Identity.objects.get(profile=self.profile,is_active=True)
+    old = Face.objects.get(profile=self.profile,is_active=True)
 
     # Swap
     old.is_active = False
@@ -80,9 +80,9 @@ class AbstractAgent(models.Model):
   #   * facebook
   service = models.CharField(max_length=20,validators=[validate_service])
 
-  # Owner identity of this agent. NULL until somebody claims this
+  # Face that this agent belongs to. NULL until somebody claims this
   # agent as themselves.
-  owner = models.ForeignKey(Identity, null=True, default=None)
+  owner = models.ForeignKey(Face, null=True, default=None)
 
   # Options
   class Meta:
@@ -96,7 +96,7 @@ class Agent(AbstractAgent):
 
 #
 #
-# Represents a pending claim to an agent by an identity.
+# Represents a pending claim to an agent by a face.
 #
 #
 class PendingClaim(AbstractAgent):
@@ -115,7 +115,7 @@ class PendingClaim(AbstractAgent):
   ckey = models.CharField(max_length=common.ckey_length, unique=True,
                           default=generate_ckey)
 
-  # Multiple identities may try to claim the same agent, so the handle,service
+  # Multiple faces may try to claim the same agent, so the handle,service
   # pair isn't necessarily unique like it is for Agent. use a handle,service,claimer
   # tuple instead.
   class Meta:
@@ -137,9 +137,9 @@ class PendingClaim(AbstractAgent):
 #
 class ConfidantLink(models.Model):
 
-  # The source and destination of a confidant link are both Identity objects.
-  src = models.ForeignKey(Identity, related_name='confidant_out_links')
-  dst = models.ForeignKey(Identity, related_name='confidant_in_links')
+  # The source and destination of a confidant link are both Face objects.
+  src = models.ForeignKey(Face, related_name='confidant_out_links')
+  dst = models.ForeignKey(Face, related_name='confidant_in_links')
 
   # Propagation coefficient - how much does information through this link
   # propagate?
@@ -147,14 +147,14 @@ class ConfidantLink(models.Model):
 
 #
 #
-# Set of tags placed on an identity.
+# Set of tags placed on a face.
 #
 #
 class TagSet(models.Model):
 
-  # The tagger and target are both Identity objects.
-  tagger = models.ForeignKey(Identity, related_name='tagsets_by')
-  target = models.ForeignKey(Identity, related_name='tagsets_for')
+  # The tagger and target are both Face objects.
+  tagger = models.ForeignKey(Face, related_name='tagsets_by')
+  target = models.ForeignKey(Face, related_name='tagsets_for')
 
   class Meta:
     unique_together = (('tagger', 'target'))

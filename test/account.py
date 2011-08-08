@@ -26,10 +26,10 @@ class SimpleAccountTestcase(TestCase):
     profile = user.get_profile()
     self.assertNotEqual(profile, None)
 
-    # The should be one active identity
-    identity = Identity.objects.get(profile=profile)
-    self.assertTrue(identity.is_active)
-    self.assertEqual(Identity.objects.filter(profile=profile,is_active=False).count(), 0)
+    # The should be one active face
+    face = Face.objects.get(profile=profile)
+    self.assertTrue(face.is_active)
+    self.assertEqual(Face.objects.filter(profile=profile,is_active=False).count(), 0)
 
   # Claim the email used in registration
   def test_good_email_claim(self):
@@ -48,11 +48,11 @@ class SimpleAccountTestcase(TestCase):
   def test_claim_unknown(self):
     self.assertEqual(Agent.objects.filter(handle='foo', service='facebook').count(), 0)
     charlie = User.objects.get(username='charlie')
-    claim = account.request_claim(charlie.get_profile().active_identity(),
+    claim = account.request_claim(charlie.get_profile().active_face(),
                                   'foo', 'facebook', True)
 
     # Repeat claims should be no-ops
-    self.assertEqual(account.request_claim(charlie.get_profile().active_identity(),
+    self.assertEqual(account.request_claim(charlie.get_profile().active_face(),
                                            'foo', 'facebook', True), None)
     account.do_claim(claim.ckey)
     self.assertEqual(Agent.objects.get(handle='foo', service='facebook').owner.profile.user,

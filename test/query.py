@@ -16,8 +16,8 @@ class SimpleQueryTestcase(TestCase):
   def test_basic(self):
 
     # Dummy query, for now.
-    results = query.do_query(self.alice.get_profile().active_identity(),
-                             self.bob.get_profile().active_identity())
+    results = query.do_query(self.alice.get_profile().active_face(),
+                             self.bob.get_profile().active_face())
     self.assertEqual(results['reliable'], 0.5)
 
 def suite():
