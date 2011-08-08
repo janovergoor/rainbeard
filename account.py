@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 import validators
 from models import *
 
-# Add a user account
+# Add a user account. Returns the created user object.
 # TODO - Make this a transaction?
 def register_user(username, password, email, send_email=True):
 
@@ -28,6 +28,8 @@ def register_user(username, password, email, send_email=True):
   # Request a claim on the email address
   request_claim(identity, handle=email, service='email',
                 quiet=(not send_email))
+
+  return user
 
 
 # Requests to claim. Returns the claim object if one is created, None otherwise.
