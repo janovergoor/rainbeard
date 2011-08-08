@@ -27,36 +27,22 @@ class SimpleAccountTestcase(TestCase):
     self.assertNotEqual(profile, None)
 
     # The should be one active face
-    face = Face.objects.get(profile=profile)
+    face = Face.objects.get(owner=profile)
     self.assertTrue(face.is_active)
-    self.assertEqual(Face.objects.filter(profile=profile,is_active=False).count(), 0)
+    self.assertEqual(Face.objects.filter(owner=profile,is_active=False).count(), 0)
 
   # Claim the email used in registration
   def test_good_email_claim(self):
     bobuser = User.objects.get(username='bob')
     self.assertFalse(bobuser.is_active)
-    agent = account.do_claim(PendingClaim.objects.get(handle='bob@example.com').ckey)
-    self.assertEqual(agent.owner.profile.user, bobuser)
+    face = account.do_claim(PendingClaim.objects.get(claimer=bobuser.get_profile()).ckey)
+    self.assertEqual(face.owner.user, bobuser)
     self.assertTrue(User.objects.get(username='bob').is_active)
 
   # Claim with a nonexistant key
   def test_bad_claim(self):
     agent = account.do_claim(''.join('f' for x in range(common.ckey_length)))
     self.assertEqual(agent, None)
-
-  # Claim an account nobody's heard of
-  def test_claim_unknown(self):
-    self.assertEqual(Agent.objects.filter(handle='foo', service='facebook').count(), 0)
-    charlie = User.objects.get(username='charlie')
-    claim = account.request_claim(charlie.get_profile().active_face(),
-                                  'foo', 'facebook', True)
-
-    # Repeat claims should be no-ops
-    self.assertEqual(account.request_claim(charlie.get_profile().active_face(),
-                                           'foo', 'facebook', True), None)
-    account.do_claim(claim.ckey)
-    self.assertEqual(Agent.objects.get(handle='foo', service='facebook').owner.profile.user,
-                     charlie)
 
 # Create accounts and log in through the web interface
 class UIAccountTestcase(TestCase):

@@ -8,6 +8,6 @@ from django.contrib.auth.models import User
 def make_user(name):
   password = name + 'pass'
   email = name + '@example.com'
-  account.register_user(name, password, email, False)
-  account.do_claim(PendingClaim.objects.get(handle=email, service='email').ckey)
+  user = account.register_user(name, password, email, False)
+  account.do_claim(PendingClaim.objects.get(claimer=user.get_profile()).ckey)
   return User.objects.get(username=name)

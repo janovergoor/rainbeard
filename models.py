@@ -17,29 +17,38 @@ class Profile(models.Model):
 
   # Gets the active face
   def active_face(self):
-    return Face.objects.get(profile=self, is_active=True)
+    return Face.objects.get(owner=self, is_active=True)
 
 
 #
 #
-# Face for a user who has registered with us. A user may have multiple
+# Faces represent distinct online identities. A user may have multiple
 # separate faces if they wish to keep certain agents distinct from each
 # other.
+#
+# Every Agent must correspond to a Face, but some Agents do not correspond
+# (yet) to a user that has registered with us. So some Faces do not have an
+# owner. We refer to these as 'unbound faces'.
 #
 #
 class Face(models.Model):
 
   # Identifier
-  label = models.CharField(max_length=20)
+  label = models.CharField(max_length=20, blank=True)
 
-  # Which user do we belong to?
-  profile = models.ForeignKey(Profile)
+  # Which user do we belong to? Null if we're unbound.
+  owner = models.ForeignKey(Profile, null=True, blank=True, default=None)
 
   # Is this face active?
   is_active = models.BooleanField(default=False)
 
-  # Activates this face, deactivating the currently active face
+  # Activates this face, deactivating the currently active face. It is an error
+  # to all this method on an unbound face.
   def activate(self):
+
+    # Unbound? Error
+    if owner is None:
+      raise Exception('Calling activate() on unbound face!')
 
     # Already active? No-op.
     if self.is_active:
@@ -47,7 +56,7 @@ class Face(models.Model):
 
     # There should be exactly one active face if we're calling activate.
     # get() will throw an exception if anything else is the case.
-    old = Face.objects.get(profile=self.profile,is_active=True)
+    old = Face.objects.get(owner=self.owner,is_active=True)
 
     # Swap
     old.is_active = False
@@ -57,17 +66,8 @@ class Face(models.Model):
     old.save()
     self.save()
 
-#
-#
-# Represents an agent in the social graph. An agent is a node to which tags
-# can be attached.
-#
-# We want to user the same structure for Agent and PendingClaim. Unfortunately,
-# django only lets you do this type of inheritance if the superclass is abstract.
-# So we declare it Abstract here and inherit it more or less verbatim in Agent.
-#
-#
-class AbstractAgent(models.Model):
+
+class Agent(models.Model):
 
   # Username on the given service. For example, jane.doe for the user jane.doe
   # on Facebook, and jane.doe@gmail.com for said email address.
@@ -80,15 +80,8 @@ class AbstractAgent(models.Model):
   #   * facebook
   service = models.CharField(max_length=20,validators=[validate_service])
 
-  # Face that this agent belongs to. NULL until somebody claims this
-  # agent as themselves.
-  owner = models.ForeignKey(Face, null=True, default=None)
-
-  # Options
-  class Meta:
-    abstract = True
-
-class Agent(AbstractAgent):
+  # Face that this agent belongs to.
+  owner = models.ForeignKey(Face)
 
   # Options
   class Meta:
@@ -96,10 +89,16 @@ class Agent(AbstractAgent):
 
 #
 #
-# Represents a pending claim to an agent by a face.
+# Represents a pending claim to a face by a user.
 #
 #
-class PendingClaim(AbstractAgent):
+class PendingClaim(models.Model):
+
+  # Claimer
+  claimer = models.ForeignKey(Profile)
+
+  # Face being claimed
+  face = models.ForeignKey(Face)
 
   # Generates a unique confirmation key. The checking here for duplicates is,
   # statistically, pretty unnecessary. But this stuff isn't on the critical path,
@@ -115,11 +114,10 @@ class PendingClaim(AbstractAgent):
   ckey = models.CharField(max_length=common.ckey_length, unique=True,
                           default=generate_ckey)
 
-  # Multiple faces may try to claim the same agent, so the handle,service
-  # pair isn't necessarily unique like it is for Agent. use a handle,service,claimer
-  # tuple instead.
+  # Options
   class Meta:
-    unique_together = (('handle', 'service', 'owner'))
+    unique_together = (('claimer', 'face'))
+
 
 #
 #

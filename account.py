@@ -12,6 +12,16 @@ from models import *
 # TODO - Make this a transaction?
 def register_user(username, password, email, send_email=True):
 
+  # Does an Agent exist for this email address? If not, make one.
+  # While we're at it, make sure that the email address is unclaimed.
+  try:
+    agent = Agent.objects.get(handle=email, service='email')
+    if agent.owner.owner is not None:
+      raise Exception('Trying to register user, but email address ' + email + ' already claimed.')
+  except Agent.DoesNotExist:
+    owner = Face.objects.create()
+    agent = Agent.objects.create(handle=email, service='email', owner=owner)
+
   # Create the user account
   user = User.objects.create_user(username, email, password=password)
   user.is_active = False
@@ -22,34 +32,31 @@ def register_user(username, password, email, send_email=True):
   profile.save()
 
   # Create the default face. This starts active.
-  face = Face(label='default', profile=profile, is_active=True)
+  face = Face(label='default', owner=profile, is_active=True)
   face.save()
 
   # Request a claim on the email address
-  request_claim(face, handle=email, service='email', quiet=(not send_email))
+  request_claim(profile, agent.owner, quiet=(not send_email))
 
   return user
 
 
-# Requests to claim. Returns the claim object if one is created, None otherwise.
+# Requests to claim a face. Returns the claimed face if one is created, None
+# otherwise.
 #
-# The caller should verify that the agent has not already been claimed
-def request_claim(face, handle, service, quiet=False):
+# The caller should verify that the face has not already been claimed
+def request_claim(claimer, face, quiet=False):
 
-  # Make sure the agent is in the database
-  agent, created = Agent.objects.get_or_create(handle=handle, service=service)
-
-  # The agent should be unknowned
-  if agent.owner != None:
-    raise Exception('Trying to claim agent that already has an owner!')
+  # The face should be unbound
+  if face.owner != None:
+    raise Exception('Trying to claim a face that already has an owner!')
 
   # If there's already a pending claim for us, don't do anything
-  if PendingClaim.objects.filter(owner=face, handle=handle,
-                                 service=service).count() != 0:
+  if PendingClaim.objects.filter(claimer=claimer, face=face).count() != 0:
     return None
 
   # Add a pending claim
-  claim = PendingClaim(owner=face, handle=handle, service=service)
+  claim = PendingClaim(claimer=claimer, face=face)
   claim.save()
 
   # We don't handle sending the message yet
@@ -62,7 +69,7 @@ def request_claim(face, handle, service, quiet=False):
 #
 # Carries out a claim given a confirmation key.
 #
-# Returns the agent claimed on success, None on failure.
+# Returns the face claimed on success, None on failure.
 #
 def do_claim(ckey):
 
@@ -72,25 +79,26 @@ def do_claim(ckey):
   except PendingClaim.DoesNotExist:
     return None
 
-  # Copy the relevant data for convenience
-  (handle, service, face) = (claim.handle, claim.service, claim.owner)
+  # Save for convenience
+  claimer = claim.claimer
+  face = claim.face
 
-  # There should already be an agent if there are pending claims. Find it
-  # and set the owner
-  agent = Agent.objects.get(handle=handle, service=service)
-  agent.owner = face
-  agent.save()
+  # Do the claim
+  face.owner = claimer
+  face.save()
 
-  # Delete all pending claims to this agent
-  PendingClaim.objects.filter(handle=handle, service=service).delete()
+  # Delete all other pending claims to this agent
+  PendingClaim.objects.filter(face=face).delete()
 
-  # If this is the email account waiting for user activation, activate
-  if service == 'email' and handle == face.profile.user.email:
-    face.profile.user.is_active = True
-    face.profile.user.save()
+  # It's possible that this corresponds to a new user carrying out email
+  # activation. Since this is the only type of claim a not-yet-active user
+  # can make, we just go ahead and activate the user here.
+  if not claimer.user.is_active:
+    claimer.user.is_active = True
+    claimer.user.save()
 
   # All done
-  return agent
+  return face
 
 #
 # Form definitions
