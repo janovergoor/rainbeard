@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from rainbeard.models import *
 from django.utils import simplejson as json
+import identity, tagging
 
 #
 # Handle asynchronous data exchange
@@ -21,24 +22,21 @@ class check_ajax(object):
 
       # Make sure that we're authenticated
       if not request.user.is_authenticated():
-        return HttpResponse('Not logged in!')
+        raise Exception('Not logged in!')
 
       # Make sure that the request looks right
-      if not request.is_ajax() or request.method != 'POST':
-        return HttpResponse('Wrong kind of request!')
+      if request.method != 'POST':
+        raise Exception('Wrong kind of request!')
 
       # Make sure that we have the parameters we want
-      if not this.paramset <= request.POST:
-        return HttResponse(json.dump({'error': 'Wrong ajax parameters!'}))
+      if not self.paramset <= set(request.POST):
+        raise Exception('Wrong ajax parameters!')
 
       # Make sure that the request validates
-      try:
-        validate_ajax_params(request.POST)
-      except ValidationError:
-        return HttResponse(json.dump({'error': 'Ajax parameters failed to validate!'}))
+      validate_ajax_params(request.POST)
 
       # Call through
-      self.f();
+      return f(*args);
 
     return wrapped_f
 
@@ -47,25 +45,17 @@ def get_givens(request):
 
   # Parameters
   handle = request.POST['handle']
-  services = request.POST['service']
+  service = request.POST['service']
 
-  # The source is the logged in user
-  source = request.user.get_profile().active_profile
+  # The tagger is the logged in user
+  tagger = request.user.get_profile().active_face
 
-  # The destination is given in the query
-  try:
-    dest = Agent.objects.get(handle=handle,service=service)
-  except Agent.DoesNotExist:
-    return HttpResponse(json.dump({'tags': {}}))
+  # The destination is given in the query. It should exist. If it doesn't,
+  # someone made a bad request. Let it throw.
+  target = identity.get_face(handle, service)
 
-  # Get our connection
-  try:
-    connections = Connection.objects.get(src=source,dst=dest)
-  except Connection.DoesNotExist:
-    return HttResponse(json.dump({'tags': {}}))
-
-  # Get all the tags
-  tags = Tag.objects.filter(connection=connection).values(['name', 'confidence'])
+  # Do the lookup
+  tags = tagging.get_tagset(tagger, target)
 
   # Send the response
-  return HttpResponse(json.dump({'tags': tags}))
+  return HttpResponse(json.dumps({'tags': tags}))

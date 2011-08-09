@@ -1,6 +1,7 @@
 from django import forms
 from django.core.validators import *
 from django.contrib.auth.models import User
+import common
 
 #
 # Validators for various bits of user input

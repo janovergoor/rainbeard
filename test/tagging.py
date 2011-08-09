@@ -2,6 +2,7 @@ from unittest import TestLoader, TestSuite
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
+from django.utils import simplejson as json
 from rainbeard import account, tagging
 from rainbeard.models import *
 from . import util
@@ -107,5 +108,39 @@ class SimpleTaggingTestcase(TestCase):
     self.assertEqual(tagging.get_tagset(self.face_alice, self.face_bob),
                      self.tags_alicetobob)
 
+
+# Do tag manipulation over the ajax interface
+class AjaxTaggingTestcase(TestCase):
+
+  def setUp(self):
+
+    # Make some accounts
+    aliceuser = util.make_user('alice', password='alicepass')
+    bobuser = util.make_user('bob', email='bob@example.org')
+
+    # Set some tags
+    self.tags_alicetobob = {'trustworthy': 7, 'funny': 3, 'reliable': 5}
+    tagging.set_tagset(aliceuser.get_profile().active_face(),
+                       bobuser.get_profile().active_face(), self.tags_alicetobob)
+
+
+  def test_basic(self):
+
+    # Log in
+    client = Client()
+    client.login(username='alice', password='alicepass')
+
+    # Make the ajax request
+    response = client.post('/ajax/givens/get', {'handle': 'bob@example.org',
+                                                'service': 'email'})
+
+    # Parse
+    tags = json.loads(response.content)['tags']
+
+    # Verify
+    self.assertEqual(tags, self.tags_alicetobob)
+
 def suite():
-  return TestSuite([TestLoader().loadTestsFromTestCase(SimpleTaggingTestcase)])
+  return TestSuite([TestLoader().loadTestsFromTestCase(SimpleTaggingTestcase),
+                    TestLoader().loadTestsFromTestCase(AjaxTaggingTestcase)])
+
