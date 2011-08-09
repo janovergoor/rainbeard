@@ -5,22 +5,18 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-import validators
+import validators, identity
 from models import *
 
 # Add a user account. Returns the created user object.
 # TODO - Make this a transaction?
 def register_user(username, password, email, send_email=True):
 
-  # Does an Agent exist for this email address? If not, make one.
+  # Doean Agent/Identity exist for this email address? If not, make them.
   # While we're at it, make sure that the email address is unclaimed.
-  try:
-    agent = Agent.objects.get(handle=email, service='email')
-    if agent.owner.owner is not None:
-      raise Exception('Trying to register user, but email address ' + email + ' already claimed.')
-  except Agent.DoesNotExist:
-    owner = Face.objects.create()
-    agent = Agent.objects.create(handle=email, service='email', owner=owner)
+  emailface = identity.get_face(email, 'email', create=True)
+  if emailface.owner is not None:
+    raise Exception('Trying to register user, but email address ' + email + ' already claimed.')
 
   # Create the user account
   user = User.objects.create_user(username, email, password=password)
@@ -36,7 +32,7 @@ def register_user(username, password, email, send_email=True):
   face.save()
 
   # Request a claim on the email address
-  request_claim(profile, agent.owner, quiet=(not send_email))
+  request_claim(profile, emailface, quiet=(not send_email))
 
   return user
 

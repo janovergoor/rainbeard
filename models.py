@@ -81,7 +81,7 @@ class Agent(models.Model):
   service = models.CharField(max_length=20,validators=[validate_service])
 
   # Face that this agent belongs to.
-  owner = models.ForeignKey(Face)
+  owner = models.ForeignKey(Face, default=lambda: Face.objects.create())
 
   # Options
   class Meta:
