@@ -27,10 +27,6 @@ def register_user(username, password, email, send_email=True):
   profile = Profile(user=user)
   profile.save()
 
-  # Create the default face. This starts active.
-  face = Face(label='default', owner=profile, is_active=True)
-  face.save()
-
   # Request a claim on the email address
   request_claim(profile, emailface, quiet=(not send_email))
 
@@ -87,9 +83,12 @@ def do_claim(ckey):
   PendingClaim.objects.filter(face=face).delete()
 
   # It's possible that this corresponds to a new user carrying out email
-  # activation. Since this is the only type of claim a not-yet-active user
-  # can make, we just go ahead and activate the user here.
-  if not claimer.user.is_active:
+  # activation. If so, handle that here.
+  if not claimer.active_face():
+    assert not claimer.user.is_active
+    face.is_active = True
+    face.label = 'default'
+    face.save()
     claimer.user.is_active = True
     claimer.user.save()
 

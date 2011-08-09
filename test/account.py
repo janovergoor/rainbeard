@@ -26,11 +26,6 @@ class SimpleAccountTestcase(TestCase):
     profile = user.get_profile()
     self.assertNotEqual(profile, None)
 
-    # The should be one active face
-    face = Face.objects.get(owner=profile)
-    self.assertTrue(face.is_active)
-    self.assertEqual(Face.objects.filter(owner=profile,is_active=False).count(), 0)
-
   # Claim the email used in registration
   def test_good_email_claim(self):
     bobuser = User.objects.get(username='bob')

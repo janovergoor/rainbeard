@@ -15,10 +15,12 @@ class Profile(models.Model):
   # Magic entry to link this with django's internal user table
   user = models.OneToOneField(User)
 
-  # Gets the active face
+  # Gets the active face. Returns None if the user has no faces yet.
   def active_face(self):
-    return Face.objects.get(owner=self, is_active=True)
-
+    try:
+      return Face.objects.get(owner=self, is_active=True)
+    except Face.DoesNotExist:
+      return None
 
 #
 #
