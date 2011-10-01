@@ -11,7 +11,7 @@ from django.test import TestCase
 from django.test.client import Client
 from tidylib import tidy_document
 
-from . import util
+import util
 
 class MarkupValidatorTestcase(TestCase):
 

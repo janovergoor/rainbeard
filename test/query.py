@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from rainbeard import query
 from rainbeard.models import *
-from . import util
+import util
 
 
 class SimpleQueryTestcase(TestCase):

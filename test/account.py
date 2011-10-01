@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 from rainbeard import account
 from rainbeard.models import *
-from . import util
+import util
 
 class SimpleAccountTestcase(TestCase):
 

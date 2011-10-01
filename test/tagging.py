@@ -10,7 +10,7 @@ from django.utils import simplejson as json
 from rainbeard import account
 from rainbeard import tagging
 from rainbeard.models import *
-from . import util
+import util
 
 
 class SimpleTaggingTestcase(TestCase):
