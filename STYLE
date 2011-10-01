@@ -1,0 +1,31 @@
+Rainbeard Style Guidelines
+==========================
+
+Rainbeard aims to exhibit a uniform style, and a high value is placed on
+maintaining the consistency, readability, and quality of the code. Code review
+should aim to enforce these guidelines.
+
+The foundation of Rainbeard style is the commonly accepted Python style
+described in PEP 8 (and, consequently, PEP 257):
+* http://www.python.org/dev/peps/pep-0008/
+* http://www.python.org/dev/peps/pep-0257/
+
+We make the following exceptions to the PEP guidelines:
+* Method docstrings are written with a descriptive voice rather than an active
+  voice. For example, the docstring for a method called create_foo() would be
+  "Creates a Foo" rather than "Create a foo". This exception is also enforced
+  within the Django codebase, and makes sense from a conceptual standpoint.
+  All other comments should be written in an active voice.
+
+Comments:
+* Comments are capitalized and end with a period. This applies to phrases as
+  well as completele sentences. Label-style comments (one or two words) can
+  be an exception to this rule, but should be used sparingly.
+* Comments should be written in the active voice ("Add a" rather than "Adds a").
+* Comments should be preceded by a blank line.
+
+Misc:
+* Single-line docstrings should be followed by an empty line. Multi-line
+  docstrings end with the """ on a separate line, and are not followed by an
+  empty line unless the subsequent line is a comment (in which case the need
+  for a blank line preceding a comment applies).
