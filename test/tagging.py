@@ -114,8 +114,8 @@ class SimpleTaggingTestcase(TestCase):
                          self.tags_alicetobob)
 
 
-# Do tag manipulation over the ajax interface
 class AjaxTaggingTestcase(TestCase):
+    """Unit test class to do tag manipulation over the ajax interface."""
 
     def setUp(self):
 

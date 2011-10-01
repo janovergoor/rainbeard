@@ -8,9 +8,13 @@ import validators
 import identity
 from models import *
 
-# Add a user account. Returns the created user object.
-# TODO - Make this a transaction?
+# TODO - Should this be a transaction?
 def register_user(username, password, email, send_email=True):
+    """
+    Adds a user account.
+
+    Returns a Django model object corresponding to the created user.
+    """
 
     # Doean Agent/Identity exist for this email address? If not, make them.
     # While we're at it, make sure that the email address is unclaimed.
@@ -33,11 +37,27 @@ def register_user(username, password, email, send_email=True):
     return user
 
 
-# Requests to claim a face. Returns the claimed face if one is created, None
-# otherwise.
-#
-# The caller should verify that the face has not already been claimed
 def request_claim(claimer, face, quiet=False):
+    """
+    Requests to claim a face on behalf of a user.
+
+    A claim represents an attempt by a user to associate an unbound Agent (via
+    its associated unbound Face) with his/her account. The ensure that this
+    claim is legitimate, we generate a secret confirmation key, store it in the
+    database, and send the key to the account being claimed (via email, facebook
+    message, etc).
+
+    Claiming is thus a two-step process. There must be a corresponding call to
+    do_claim() in order for the association to be finalized.
+
+    Arguments:
+    claimer - The user doing the claim, represented by a Profile model.
+    face - The Face object being claimed.
+    quiet - Whether the claim message should be sent. Passing False here is
+            useful for unit testing.
+
+    If the face already has an owner, an exception will be raised.
+    """
 
     # The face should be unbound
     if face.owner != None:
@@ -58,12 +78,14 @@ def request_claim(claimer, face, quiet=False):
     # Done
     return claim
 
-#
-# Carries out a claim given a confirmation key.
-#
-# Returns the face claimed on success, None on failure.
-#
 def do_claim(ckey):
+    """
+    Carries out a claim given a confirmation key.
+
+    This is the second part of the claim process begun in request_claim().
+
+    Returns the claimed face if the claim is successful, None otherwise.
+    """
 
     # Find the relevant entry
     try:
@@ -95,17 +117,16 @@ def do_claim(ckey):
     # All done
     return face
 
-#
-# Form definitions
-#
 
 class LoginForm(forms.Form):
+    """Django form for user login."""
+
     username = forms.CharField(max_length=30)
     password = forms.CharField(widget=forms.PasswordInput())
     next = forms.CharField(widget=forms.HiddenInput())
 
-    # Validation
     def clean(self):
+        """Django form validation method. Called automatically."""
 
         # Store the incoming cleaned data
         data = self.cleaned_data
@@ -127,6 +148,8 @@ class LoginForm(forms.Form):
 
 
 class RegForm(forms.Form):
+    """Django form for user registration."""
+
     username = forms.CharField(max_length=30,label='Pick a Username',
                                validators=[validators.validate_new_username])
     email = forms.EmailField(label='Your Email',
@@ -135,8 +158,8 @@ class RegForm(forms.Form):
     password_confirmation = forms.CharField(widget=forms.PasswordInput(),
                                             label='Confirm Password')
 
-    # Validation
     def clean(self):
+        """Django form validation method. Called automatically."""
 
         # Store the incoming cleaned data
         data = self.cleaned_data

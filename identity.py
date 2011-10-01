@@ -2,21 +2,25 @@
 
 from models import *
 
-# Gets the face corresponding to a (handle, service) tuple.
-#
-# If the face and agent do not yet exist and create=True is passed, they
-# are created. Otherwise, Face.DoesNotExist is raised.
 def get_face(handle, service, create=False):
+    """
+    Gets the face corresponding to a (handle, service) tuple.
+
+    If the face and agent do not yet exist and create=True is passed, they
+    are created. Otherwise, Face.DoesNotExist is raised.
+    """
     try:
         return get_agent(handle, service, create=create).owner
     except Agent.DoesNotExist:
         raise Face.DoesNotExist()
 
-# Gets the agent corresponding to a (handle, service) tuple.
-#
-# If the face and agent do not yet exist and create=True is passed, they
-# are created. Otherwise, Agent.DoesNotExist is raised.
 def get_agent(handle, service, create=False):
+    """
+    Gets the agent corresponding to a (handle, service) tuple.
+
+    If the face and agent do not yet exist and create=True is passed, they
+    are created. Otherwise, Agent.DoesNotExist is raised.
+    """
 
     # If we're not creating, just do a get(). We want the exception if it's raised.
     if not create:

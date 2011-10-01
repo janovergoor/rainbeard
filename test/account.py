@@ -29,30 +29,30 @@ class SimpleAccountTestcase(TestCase):
         profile = user.get_profile()
         self.assertNotEqual(profile, None)
 
-    # Claim the email used in registration
     def test_good_email_claim(self):
+
+        # Claim the email used in registration
         bobuser = User.objects.get(username='bob')
         self.assertFalse(bobuser.is_active)
         face = account.do_claim(PendingClaim.objects.get(claimer=bobuser.get_profile()).ckey)
         self.assertEqual(face.owner.user, bobuser)
         self.assertTrue(User.objects.get(username='bob').is_active)
 
-    # Claim with a nonexistant key
     def test_bad_claim(self):
+
+        # Claim with a nonexistant key
         agent = account.do_claim(''.join('f' for x in range(common.ckey_length)))
         self.assertEqual(agent, None)
 
-# Create accounts and log in through the web interface
 class UIAccountTestcase(TestCase):
+    """Unit test class to Create accounts and log in through the web interface."""
 
-    # Create some accounts
     def setUp(self):
+
+        # Create some accounts
         account.register_user('alice', 'alicepass', 'alice@example.com', False)
         util.make_user('bob') # make_user activates the user too
 
-    #
-    # Test a good registration
-    #
     def test_good_registration(self):
         self.assertEqual(User.objects.filter(username='charlie').count(), 0)
         response = Client().post('/register', {'username': 'charlie',
@@ -60,7 +60,6 @@ class UIAccountTestcase(TestCase):
                                                'password': 'pass',
                                                'password_confirmation': 'pass'})
         self.assertEqual(User.objects.filter(username='charlie').count(), 1)
-
 
     #
     # Test all the ways in which we can make faulty accounts
@@ -97,14 +96,13 @@ class UIAccountTestcase(TestCase):
         self.assertEqual(len(response.context['form'].non_field_errors()), 1)
 
 
-    # Test 'next' url tracking
     def test_next_url(self):
+        """Test 'next' url tracking."""
+
         client = Client()
         response = client.get('/query', follow=True)
         self.assertEqual(response.context['form'].initial['next'], '/query')
 
-
-    # Test a good login
     def test_good_login(self):
 
         # Log in
@@ -130,8 +128,9 @@ class UIAccountTestcase(TestCase):
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
 
 
-    # Test an incorrect password
     def test_bad_password_login(self):
+        """Tests an incorrect password."""
+
         response = Client().get('/', follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
         response = response.client.post('/login', {'username': 'bob',
@@ -140,7 +139,6 @@ class UIAccountTestcase(TestCase):
                                         follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
 
-    # Test an inactive login
     def test_inactive_login(self):
         response = Client().get('/', follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')

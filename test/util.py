@@ -6,10 +6,12 @@ from django.test.client import Client
 from rainbeard import account
 from rainbeard.models import *
 
-# Utility to generate and activate a user.
-#
-# Returns the User object for the created user
 def make_user(name, password=None, email=None):
+    """
+    Utility to generate and activate a user.
+
+    Returns the User object for the created user
+    """
     if not password:
         password = name + 'pass'
     if not email:

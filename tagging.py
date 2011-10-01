@@ -2,13 +2,15 @@
 
 from models import *
 
-# Gets the tagset that 'tagger' has placed on 'target'.
-#
-# 'tagger' and 'target' are each by specified as a face object.
-#
-# Returns an object mapping tag names to confidence values. If there is
-# no match for any reason, an empty tagset is returned. Does not throw.
 def get_tagset(tagger, target):
+    """
+    Gets the tagset that 'tagger' has placed on 'target'.
+
+    'tagger' and 'target' are each by specified as a face object.
+
+    Returns an object mapping tag names to confidence values. If there is
+    no match for any reason, an empty tagset is returned. Does not throw.
+    """
 
     # Look up the tagset. If no results are found here, then no tags have been placed.
     try:
@@ -21,12 +23,14 @@ def get_tagset(tagger, target):
     return dict((k, v) for (k, v) in tags)
 
 
-# Sets the tagset that 'tagger' places on 'target'.
-#
-# 'tagger' and 'target' are each by specified as a face object.
-#
-# Does not return a value.
 def set_tagset(tagger, target, tags):
+    """
+    Sets the tagset that 'tagger' places on 'target'.
+
+    'tagger' and 'target' are each by specified as a face object.
+
+    Does not return a value.
+    """
 
     # We're going to modify the dict, so make a copy to avoid nasty side effects.
     # NB - We intentionally shadow the method argument here, so that nobody uses

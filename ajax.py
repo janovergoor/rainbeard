@@ -10,6 +10,13 @@ from rainbeard.models import *
 # Handy decorator to make sure the user is logged in and do various
 # checking. Accepts a set of the parameters the function expects.
 class check_ajax(object):
+    """
+    Python decorator class for wrapping AJAX handler functions.
+
+    This method augments a function with various checks relevant to ajax
+    requests. When declared as a decorator, it accepts a set of the parameters
+    the function expects.
+    """
     def __init__(self, paramset):
         self.paramset = paramset
     def __call__(self, f):
@@ -41,6 +48,11 @@ class check_ajax(object):
 
 @check_ajax(set(('handle', 'service')))
 def get_givens(request):
+    """
+    Gets the tags that the current user has placed on an agent.
+
+    The agent is uniquely identified by the (handle, service) tuple.
+    """
 
     # Parameters
     handle = request.POST['handle']
