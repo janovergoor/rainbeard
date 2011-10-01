@@ -1,6 +1,4 @@
-#
-# Code for performing rainbeard queries.
-#
+"""Confidant network query module."""
 
 #
 # Generates a tag cloud about 'target' from the perspective of 'source'.

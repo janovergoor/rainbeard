@@ -1,11 +1,17 @@
+"""
+Validator module.
+
+This module contains various data validators used by different parts of
+Rainbeard. It's possible that using them in multiple places is an indication
+that we aren't using Django as efficiently as we could be. Consolidation
+efforts are always welcome.
+"""
+
 from django import forms
 from django.core.validators import *
 from django.contrib.auth.models import User
 import common
 
-#
-# Validators for various bits of user input
-#
 
 # Agent handles
 validate_handle = RegexValidator('[a-zA-z0-9_&\.\+=]+')

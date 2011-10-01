@@ -1,3 +1,14 @@
+"""
+View module.
+
+When Django receives a request, it examines the URL to determine how it should
+proceed. The URL module maps URL patterns to view functions, which are defined
+here.
+
+View functions should do the minimum possible to service the request. Any heavy
+lifting should occur in other modules.
+"""
+
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.conf import settings

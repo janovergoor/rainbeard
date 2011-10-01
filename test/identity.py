@@ -1,3 +1,5 @@
+"""Identity management unit tests."""
+
 from unittest import TestLoader, TestSuite
 from django.test import TestCase
 from django.contrib.auth.models import User

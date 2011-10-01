@@ -1,12 +1,15 @@
-# Rainbeard url configuration. You must include this in your site-wide urls.py
-# as follows:
-#
-# from rainbeard.urls import urls as rainbeard_urls
-#
-# urlpatterns = patterns('',
-#                 ...
-#                 url(r'', include(rainbeard_urls))
+"""
+URL configuration module.
 
+This file is used by django to set up the URL routes appropriately. You must
+include this in your site-wide urls.py as follows:
+
+from rainbeard.urls import urls as rainbeard_urls
+
+urlpatterns = patterns('',
+                ...
+                url(r'', include(rainbeard_urls))
+"""
 
 import views, ajax
 from django.conf.urls.defaults import patterns, url

@@ -1,11 +1,9 @@
+"""Asynchronous data exchange module."""
+
 from django.http import HttpResponse
 from rainbeard.models import *
 from django.utils import simplejson as json
 import identity, tagging
-
-#
-# Handle asynchronous data exchange
-#
 
 
 # Handy decorator to make sure the user is logged in and do various

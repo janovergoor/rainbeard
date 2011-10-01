@@ -1,3 +1,5 @@
+"""Utility module for Rainbeard unit tests."""
+
 from rainbeard import account
 from rainbeard.models import *
 from django.contrib.auth.models import User

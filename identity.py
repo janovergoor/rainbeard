@@ -1,6 +1,4 @@
-#
-# Code relating to identity management.
-#
+"""Identity management module."""
 
 from models import *
 

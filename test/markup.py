@@ -1,3 +1,10 @@
+"""
+Markup validation unit test shim.
+
+This module hooks a markup validator into our unit test framework, allowing us
+to automatically validate the markup we generate.
+"""
+
 from unittest import TestLoader, TestSuite
 from django.test import TestCase
 from django.test.client import Client

@@ -1,3 +1,5 @@
+"""Confidant network query unit tests."""
+
 from unittest import TestLoader, TestSuite
 from django.test import TestCase
 from rainbeard.models import *

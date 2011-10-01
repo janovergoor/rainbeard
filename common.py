@@ -1,6 +1,4 @@
-#
-# Common definitions
-#
+"""Constants used by all of Rainbeard."""
 
 # List of supported services
 services = ['facebook', 'email']

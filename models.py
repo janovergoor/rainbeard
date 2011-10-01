@@ -1,3 +1,10 @@
+"""
+SQL-backed data model module.
+
+This module is used by Django to map various data storage backends to python
+objects.
+"""
+
 import random, string
 from django.db import models
 from django.contrib.auth.models import User

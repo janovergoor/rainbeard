@@ -1,3 +1,5 @@
+"""Tag management unit tests."""
+
 from unittest import TestLoader, TestSuite
 from django.test import TestCase
 from django.test.client import Client

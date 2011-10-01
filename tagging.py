@@ -1,6 +1,4 @@
-#
-# Code relating to tagging
-#
+"""Tag management module."""
 
 from models import *
 

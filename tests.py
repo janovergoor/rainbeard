@@ -1,3 +1,10 @@
+"""
+Unit test module.
+
+The unit tests themselves are stored in the 'test' subdirectory. This module is
+a simple shim that hooks them into Django's testing framework.
+"""
+
 import unittest
 from test import *
 import test
