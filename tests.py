@@ -6,6 +6,7 @@ a simple shim that hooks them into Django's testing framework.
 """
 
 import unittest
+
 from test import *
 import test
 

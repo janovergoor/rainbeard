@@ -14,6 +14,7 @@ from django.shortcuts import render_to_response, redirect
 from django.conf import settings
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+
 import account
 
 def register_view(request):

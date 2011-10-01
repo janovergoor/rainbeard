@@ -6,10 +6,12 @@ to automatically validate the markup we generate.
 """
 
 from unittest import TestLoader, TestSuite
+
 from django.test import TestCase
 from django.test.client import Client
-from . import util
 from tidylib import tidy_document
+
+from . import util
 
 class MarkupValidatorTestcase(TestCase):
 

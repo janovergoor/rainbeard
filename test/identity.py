@@ -1,10 +1,13 @@
 """Identity management unit tests."""
 
 from unittest import TestLoader, TestSuite
+
 from django.test import TestCase
 from django.contrib.auth.models import User
+
+from rainbeard import account
+from rainbeard import identity
 from rainbeard.models import *
-from rainbeard import account, identity
 
 class SimpleIdentityTestcase(TestCase):
 

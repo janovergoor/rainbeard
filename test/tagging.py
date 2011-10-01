@@ -1,11 +1,14 @@
 """Tag management unit tests."""
 
 from unittest import TestLoader, TestSuite
+
 from django.test import TestCase
 from django.test.client import Client
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
-from rainbeard import account, tagging
+
+from rainbeard import account
+from rainbeard import tagging
 from rainbeard.models import *
 from . import util
 

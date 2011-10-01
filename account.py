@@ -3,7 +3,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-import validators, identity
+
+import validators
+import identity
 from models import *
 
 # Add a user account. Returns the created user object.

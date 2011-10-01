@@ -1,9 +1,10 @@
 """Utility module for Rainbeard unit tests."""
 
-from rainbeard import account
-from rainbeard.models import *
 from django.contrib.auth.models import User
 from django.test.client import Client
+
+from rainbeard import account
+from rainbeard.models import *
 
 # Utility to generate and activate a user.
 #

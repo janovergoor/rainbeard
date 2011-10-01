@@ -11,8 +11,10 @@ urlpatterns = patterns('',
                 url(r'', include(rainbeard_urls))
 """
 
-import views, ajax
 from django.conf.urls.defaults import patterns, url
+
+import views
+import ajax
 
 urls = patterns('',
          url(r'^logout/?', views.logout_view),

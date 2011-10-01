@@ -10,8 +10,8 @@ efforts are always welcome.
 from django import forms
 from django.core.validators import *
 from django.contrib.auth.models import User
-import common
 
+import common
 
 # Agent handles
 validate_handle = RegexValidator('[a-zA-z0-9_&\.\+=]+')
