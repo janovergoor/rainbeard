@@ -10,10 +10,10 @@ from rainbeard.models import *
 #
 # Returns the User object for the created user
 def make_user(name, password=None, email=None):
-  if not password:
-    password = name + 'pass'
-  if not email:
-    email = name + '@example.com'
-  user = account.register_user(name, password, email, False)
-  account.do_claim(PendingClaim.objects.get(claimer=user.get_profile()).ckey)
-  return User.objects.get(username=name)
+    if not password:
+        password = name + 'pass'
+    if not email:
+        email = name + '@example.com'
+    user = account.register_user(name, password, email, False)
+    account.do_claim(PendingClaim.objects.get(claimer=user.get_profile()).ckey)
+    return User.objects.get(username=name)

@@ -7,4 +7,4 @@
 #
 def do_query(source, target):
 
-  return {'reliable' : 0.5}
+    return {'reliable' : 0.5}

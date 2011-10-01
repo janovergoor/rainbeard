@@ -11,18 +11,18 @@ import util
 
 class SimpleQueryTestcase(TestCase):
 
-  def setUp(self):
+    def setUp(self):
 
-    # Create two basic user accounts with email addresses
-    self.alice = util.make_user('alice')
-    self.bob = util.make_user('bob')
+        # Create two basic user accounts with email addresses
+        self.alice = util.make_user('alice')
+        self.bob = util.make_user('bob')
 
-  def test_basic(self):
+    def test_basic(self):
 
-    # Dummy query, for now.
-    results = query.do_query(self.alice.get_profile().active_face(),
-                             self.bob.get_profile().active_face())
-    self.assertEqual(results['reliable'], 0.5)
+        # Dummy query, for now.
+        results = query.do_query(self.alice.get_profile().active_face(),
+                                 self.bob.get_profile().active_face())
+        self.assertEqual(results['reliable'], 0.5)
 
 def suite():
-  return TestSuite([TestLoader().loadTestsFromTestCase(SimpleQueryTestcase)])
+    return TestSuite([TestLoader().loadTestsFromTestCase(SimpleQueryTestcase)])

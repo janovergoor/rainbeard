@@ -22,15 +22,15 @@ from validators import *
 #
 class Profile(models.Model):
 
-  # Magic entry to link this with django's internal user table
-  user = models.OneToOneField(User)
+    # Magic entry to link this with django's internal user table
+    user = models.OneToOneField(User)
 
-  # Gets the active face. Returns None if the user has no faces yet.
-  def active_face(self):
-    try:
-      return Face.objects.get(owner=self, is_active=True)
-    except Face.DoesNotExist:
-      return None
+    # Gets the active face. Returns None if the user has no faces yet.
+    def active_face(self):
+        try:
+            return Face.objects.get(owner=self, is_active=True)
+        except Face.DoesNotExist:
+            return None
 
 #
 #
@@ -45,59 +45,59 @@ class Profile(models.Model):
 #
 class Face(models.Model):
 
-  # Identifier
-  label = models.CharField(max_length=20, blank=True)
+    # Identifier
+    label = models.CharField(max_length=20, blank=True)
 
-  # Which user do we belong to? Null if we're unbound.
-  owner = models.ForeignKey(Profile, null=True, blank=True, default=None)
+    # Which user do we belong to? Null if we're unbound.
+    owner = models.ForeignKey(Profile, null=True, blank=True, default=None)
 
-  # Is this face active?
-  is_active = models.BooleanField(default=False)
+    # Is this face active?
+    is_active = models.BooleanField(default=False)
 
-  # Activates this face, deactivating the currently active face. It is an error
-  # to all this method on an unbound face.
-  def activate(self):
+    # Activates this face, deactivating the currently active face. It is an error
+    # to all this method on an unbound face.
+    def activate(self):
 
-    # Unbound? Error
-    if owner is None:
-      raise Exception('Calling activate() on unbound face!')
+        # Unbound? Error
+        if owner is None:
+            raise Exception('Calling activate() on unbound face!')
 
-    # Already active? No-op.
-    if self.is_active:
-      return
+        # Already active? No-op.
+        if self.is_active:
+            return
 
-    # There should be exactly one active face if we're calling activate.
-    # get() will throw an exception if anything else is the case.
-    old = Face.objects.get(owner=self.owner,is_active=True)
+        # There should be exactly one active face if we're calling activate.
+        # get() will throw an exception if anything else is the case.
+        old = Face.objects.get(owner=self.owner,is_active=True)
 
-    # Swap
-    old.is_active = False
-    self.is_active = True
+        # Swap
+        old.is_active = False
+        self.is_active = True
 
-    # Save
-    old.save()
-    self.save()
+        # Save
+        old.save()
+        self.save()
 
 
 class Agent(models.Model):
 
-  # Username on the given service. For example, jane.doe for the user jane.doe
-  # on Facebook, and jane.doe@gmail.com for said email address.
-  handle = models.CharField(max_length=100,validators=[validate_handle])
+    # Username on the given service. For example, jane.doe for the user jane.doe
+    # on Facebook, and jane.doe@gmail.com for said email address.
+    handle = models.CharField(max_length=100,validators=[validate_handle])
 
-  # Name of service where this handle originates.
-  #
-  # Current valid values are:
-  #   * email
-  #   * facebook
-  service = models.CharField(max_length=20,validators=[validate_service])
+    # Name of service where this handle originates.
+    #
+    # Current valid values are:
+    #   * email
+    #   * facebook
+    service = models.CharField(max_length=20,validators=[validate_service])
 
-  # Face that this agent belongs to.
-  owner = models.ForeignKey(Face, default=lambda: Face.objects.create())
+    # Face that this agent belongs to.
+    owner = models.ForeignKey(Face, default=lambda: Face.objects.create())
 
-  # Options
-  class Meta:
-    unique_together = (('handle', 'service'))
+    # Options
+    class Meta:
+        unique_together = (('handle', 'service'))
 
 #
 #
@@ -106,29 +106,29 @@ class Agent(models.Model):
 #
 class PendingClaim(models.Model):
 
-  # Claimer
-  claimer = models.ForeignKey(Profile)
+    # Claimer
+    claimer = models.ForeignKey(Profile)
 
-  # Face being claimed
-  face = models.ForeignKey(Face)
+    # Face being claimed
+    face = models.ForeignKey(Face)
 
-  # Generates a unique confirmation key. The checking here for duplicates is,
-  # statistically, pretty unnecessary. But this stuff isn't on the critical path,
-  # so why not?
-  def generate_ckey():
-    while True:
-      k = ''.join(random.choice(string.ascii_letters + string.digits)
-                  for x in range(common.ckey_length))
-      if PendingClaim.objects.filter(ckey=k).count() == 0:
-        return k
+    # Generates a unique confirmation key. The checking here for duplicates is,
+    # statistically, pretty unnecessary. But this stuff isn't on the critical path,
+    # so why not?
+    def generate_ckey():
+        while True:
+            k = ''.join(random.choice(string.ascii_letters + string.digits)
+                        for x in range(common.ckey_length))
+            if PendingClaim.objects.filter(ckey=k).count() == 0:
+                return k
 
-  # Confirmation Key
-  ckey = models.CharField(max_length=common.ckey_length, unique=True,
-                          default=generate_ckey)
+    # Confirmation Key
+    ckey = models.CharField(max_length=common.ckey_length, unique=True,
+                            default=generate_ckey)
 
-  # Options
-  class Meta:
-    unique_together = (('claimer', 'face'))
+    # Options
+    class Meta:
+        unique_together = (('claimer', 'face'))
 
 
 #
@@ -147,13 +147,13 @@ class PendingClaim(models.Model):
 #
 class ConfidantLink(models.Model):
 
-  # The source and destination of a confidant link are both Face objects.
-  src = models.ForeignKey(Face, related_name='confidant_out_links')
-  dst = models.ForeignKey(Face, related_name='confidant_in_links')
+    # The source and destination of a confidant link are both Face objects.
+    src = models.ForeignKey(Face, related_name='confidant_out_links')
+    dst = models.ForeignKey(Face, related_name='confidant_in_links')
 
-  # Propagation coefficient - how much does information through this link
-  # propagate?
-  prop_coef = models.PositiveSmallIntegerField(validators=[validate_prop_coef])
+    # Propagation coefficient - how much does information through this link
+    # propagate?
+    prop_coef = models.PositiveSmallIntegerField(validators=[validate_prop_coef])
 
 #
 #
@@ -162,12 +162,12 @@ class ConfidantLink(models.Model):
 #
 class TagSet(models.Model):
 
-  # The tagger and target are both Face objects.
-  tagger = models.ForeignKey(Face, related_name='tagsets_by')
-  target = models.ForeignKey(Face, related_name='tagsets_for')
+    # The tagger and target are both Face objects.
+    tagger = models.ForeignKey(Face, related_name='tagsets_by')
+    target = models.ForeignKey(Face, related_name='tagsets_for')
 
-  class Meta:
-    unique_together = (('tagger', 'target'))
+    class Meta:
+        unique_together = (('tagger', 'target'))
 
 #
 #
@@ -176,11 +176,11 @@ class TagSet(models.Model):
 #
 class Tag(models.Model):
 
-  # Name of the tag
-  name = models.SlugField(max_length=40)
+    # Name of the tag
+    name = models.SlugField(max_length=40)
 
-  # Confidence given to the tag
-  confidence = models.PositiveSmallIntegerField(validators=[validate_confidence])
+    # Confidence given to the tag
+    confidence = models.PositiveSmallIntegerField(validators=[validate_confidence])
 
-  # TagSet this tag corresponds to
-  tagset = models.ForeignKey(TagSet)
+    # TagSet this tag corresponds to
+    tagset = models.ForeignKey(TagSet)

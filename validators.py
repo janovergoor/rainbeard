@@ -18,13 +18,13 @@ validate_handle = RegexValidator('[a-zA-z0-9_&\.\+=]+')
 
 # Agent service
 def validate_service(service):
-  if service not in set(common.services):
-    raise ValidationError('Invalid Service')
+    if service not in set(common.services):
+        raise ValidationError('Invalid Service')
 
 # Confidence values
 def validate_confidence(confidence):
-  if confidence % 2 == 0 or confidence < 1 or confidence > 9:
-    raise ValidationError('Invalid confidence value')
+    if confidence % 2 == 0 or confidence < 1 or confidence > 9:
+        raise ValidationError('Invalid confidence value')
 
 
 # Propagation coefficients (as fractions of 4)
@@ -34,21 +34,21 @@ def validate_confidence(confidence):
 # 3 <-> 3/4
 # 4 <-> 1
 def validate_prop_coef(coef):
-  if coef < 0 or coef > 4:
-    raise ValidationError('Invalid Propagation Coefficient')
+    if coef < 0 or coef > 4:
+        raise ValidationError('Invalid Propagation Coefficient')
 
 
 # Validate an ajax request post
 #
 # Throws an error if it doesn't recognize one of the parameters
 def validate_ajax_params(params):
-  for key,value in params.items():
-    if key == 'handle':
-      validate_handle(value)
-    elif key == 'service':
-      validate_service(value)
-    else:
-      raise ValidationError('Unknown POST parameter')
+    for key,value in params.items():
+        if key == 'handle':
+            validate_handle(value)
+        elif key == 'service':
+            validate_service(value)
+        else:
+            raise ValidationError('Unknown POST parameter')
 
 
 # Validate a new username to make sure it doesn't exist.
@@ -61,8 +61,8 @@ def validate_ajax_params(params):
 # case (the user will get a 500 error when trying to create an account), but
 # data integrity will be preserved.
 def validate_new_username(username):
-  if User.objects.filter(username=username).count() != 0:
-    raise forms.ValidationError('Username already exists in the system.')
+    if User.objects.filter(username=username).count() != 0:
+        raise forms.ValidationError('Username already exists in the system.')
 
 # Check if the given email already belongs to an active user.
 #
@@ -85,6 +85,6 @@ def validate_new_username(username):
 # like to handle the common case with a nice warning rather than an exception.
 # So do that.
 def validate_new_email(email):
-  if User.objects.filter(email=email,is_active=True).count() != 0:
-    raise forms.ValidationError('The email address provided already ' +
-                                'exists in the system.')
+    if User.objects.filter(email=email,is_active=True).count() != 0:
+        raise forms.ValidationError('The email address provided already ' +
+                                    'exists in the system.')
