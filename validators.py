@@ -53,7 +53,7 @@ def validate_ajax_params(params):
 
     Throws an error if it doesn't recognize one of the parameters.
     """
-    for key,value in params.items():
+    for key, value in params.items():
         if key == 'handle':
             validate_handle(value)
         elif key == 'service':
@@ -101,6 +101,6 @@ def validate_new_email(email):
     like to handle the common case with a nice warning rather than an
     exception. So do that.
     """
-    if User.objects.filter(email=email,is_active=True).count() != 0:
+    if User.objects.filter(email=email, is_active=True).count() != 0:
         raise forms.ValidationError('The email address provided already ' +
                                     'exists in the system.')

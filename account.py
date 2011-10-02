@@ -155,7 +155,7 @@ class LoginForm(forms.Form):
 class RegForm(forms.Form):
     """Django form for user registration."""
 
-    username = forms.CharField(max_length=30,label='Pick a Username',
+    username = forms.CharField(max_length=30, label='Pick a Username',
                                validators=[validators.validate_new_username])
     email = forms.EmailField(label='Your Email',
                              validators=[validators.validate_new_email])

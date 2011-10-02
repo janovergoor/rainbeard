@@ -11,7 +11,7 @@ lifting should occur in other modules.
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.conf import settings
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 import account
@@ -48,7 +48,7 @@ def register_view(request):
 
     # Display the form.
     return render_to_response('rainbeard/templates/register.html',
-                              {'form' : form})
+                              {'form': form})
 
 
 def login_view(request, ignored):
@@ -73,11 +73,11 @@ def login_view(request, ignored):
         next = '/'
         if 'next' in request.GET:
             next = request.GET['next']
-        form = account.LoginForm(initial={'next':next})
+        form = account.LoginForm(initial={'next': next})
 
     # Display the form.
     return render_to_response('rainbeard/templates/login.html',
-                              {'form' : form})
+                              {'form': form})
 
 
 def logout_view(request):
@@ -104,7 +104,7 @@ def query_view(request):
         picsrc = 'https://graph.facebook.com/' + handle + \
                  '/picture?type=large';
 
-    context = {'service' : service,
-               'handle' : handle,
-               'picsrc' : picsrc};
+    context = {'service': service,
+               'handle': handle,
+               'picsrc': picsrc};
     return render_to_response('rainbeard/templates/query.html', context)

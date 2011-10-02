@@ -79,7 +79,7 @@ class Face(models.Model):
 
         # There should be exactly one active face if we're calling activate.
         # get() will throw an exception if anything else is the case.
-        old = Face.objects.get(owner=self.owner,is_active=True)
+        old = Face.objects.get(owner=self.owner, is_active=True)
 
         # Swap.
         old.is_active = False
@@ -101,14 +101,16 @@ class Agent(models.Model):
 
     # Username on the given service. For example, jane.doe for the user
     # jane.doe on Facebook, and jane.doe@gmail.com for said email address.
-    handle = models.CharField(max_length=100,validators=[validate_handle])
+    handle = models.CharField(max_length=100,
+                              validators=[validate_handle])
 
     # Name of service where this handle originates.
     #
     # Current valid values are:
     #   * email
     #   * facebook
-    service = models.CharField(max_length=20,validators=[validate_service])
+    service = models.CharField(max_length=20,
+                               validators=[validate_service])
 
     # Face that this agent belongs to.
     owner = models.ForeignKey(Face, default=lambda: Face.objects.create())

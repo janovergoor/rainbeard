@@ -8,4 +8,4 @@ def do_query(source, target):
     The returned tag cloud is a dictionary mapping tag names to strength
     values.
     """
-    return {'reliable' : 0.5}
+    return {'reliable': 0.5}

@@ -18,4 +18,4 @@ from rainbeard.settings import *
 AUTH_PROFILE_MODULE = 'rainbeard.Profile'
 
 # Define the login URL
-LOGIN_URL='/login'
+LOGIN_URL = '/login'
