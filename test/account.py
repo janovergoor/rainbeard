@@ -57,7 +57,7 @@ class UIAccountTestcase(TestCase):
 
         # Create some accounts.
         account.register_user('alice', 'alicepass', 'alice@example.com', False)
-        util.make_user('bob') # make_user activates the user too
+        util.make_user('bob')  # make_user activates the user too
 
     def test_good_registration(self):
         self.assertEqual(User.objects.filter(username='charlie').count(), 0)
