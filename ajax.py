@@ -44,7 +44,7 @@ class check_ajax(object):
             validate_ajax_params(request.POST)
 
             # Call through.
-            return f(*args);
+            return f(*args)
 
         return wrapped_f
 

@@ -99,12 +99,12 @@ def query_view(request):
     handle = request.GET['handle']
 
     # Figure out the source for the profile image.
-    picsrc = settings.STATIC_URL + 'blankprofile.jpg';
+    picsrc = settings.STATIC_URL + 'blankprofile.jpg'
     if service == "facebook":
         picsrc = 'https://graph.facebook.com/' + handle + \
-                 '/picture?type=large';
+                 '/picture?type=large'
 
     context = {'service': service,
                'handle': handle,
-               'picsrc': picsrc};
+               'picsrc': picsrc}
     return render_to_response('rainbeard/templates/query.html', context)
