@@ -20,7 +20,8 @@ def register_user(username, password, email, send_email=True):
     # While we're at it, make sure that the email address is unclaimed.
     emailface = identity.get_face(email, 'email', create=True)
     if emailface.owner is not None:
-        raise Exception('Trying to register user, but email address ' + email + ' already claimed.')
+        raise Exception('Trying to register user, but email address ' + email +
+                        ' already claimed.')
 
     # Create the user account.
     user = User.objects.create_user(username, email, password=password)
@@ -44,8 +45,8 @@ def request_claim(claimer, face, quiet=False):
     A claim represents an attempt by a user to associate an unbound Agent (via
     its associated unbound Face) with his/her account. The ensure that this
     claim is legitimate, we generate a secret confirmation key, store it in the
-    database, and send the key to the account being claimed (via email, facebook
-    message, etc).
+    database, and send the key to the account being claimed (via email,
+    facebook message, etc).
 
     Claiming is thus a two-step process. There must be a corresponding call to
     do_claim() in order for the association to be finalized.
@@ -138,7 +139,8 @@ class LoginForm(forms.Form):
             if user is None:
                 raise forms.ValidationError('Invalid login.')
             if not user.is_active:
-                raise forms.ValidationError('This account has not yet been activated or has been disabled.')
+                raise forms.ValidationError('This account has not yet been ' +
+                                            'activated or has been disabled.')
 
             # Save the user object so that we don't have to call authenticate()
             # twice.
@@ -155,7 +157,8 @@ class RegForm(forms.Form):
                                validators=[validators.validate_new_username])
     email = forms.EmailField(label='Your Email',
                              validators=[validators.validate_new_email])
-    password = forms.CharField(widget=forms.PasswordInput(),label='New Password')
+    password = forms.CharField(widget=forms.PasswordInput(),
+                               label='New Password')
     password_confirmation = forms.CharField(widget=forms.PasswordInput(),
                                             label='Confirm Password')
 

@@ -12,7 +12,8 @@ def get_tagset(tagger, target):
     no match for any reason, an empty tagset is returned. Does not throw.
     """
 
-    # Look up the tagset. If no results are found here, then no tags have been placed.
+    # Look up the tagset. If no results are found here, then no tags have been
+    # placed.
     try:
         tagset = TagSet.objects.get(tagger=tagger, target=target)
     except TagSet.DoesNotExist:
@@ -32,14 +33,17 @@ def set_tagset(tagger, target, tags):
     Does not return a value.
     """
 
-    # We're going to modify the dict, so make a copy to avoid nasty side effects.
-    # NB - We intentionally shadow the method argument here, so that nobody uses
-    # it by accident. It's a direct copy, so nobody should need to touch the
-    # original.
+    # We're going to modify the dict, so make a copy to avoid nasty side
+    # effects.
+    #
+    # NB - We intentionally shadow the method argument here, so that nobody
+    # uses it by accident. It's a direct copy, so nobody should need to touch
+    # the original.
     tags = tags.copy()
 
     # Get or create the tagset.
-    tagset, created = TagSet.objects.get_or_create(tagger=tagger, target=target)
+    tagset, created = TagSet.objects.get_or_create(tagger=tagger,
+                                                   target=target)
 
     # Remove all tags that aren't in the new set. Note that, thanks to late
     # evalution of django querysets, this only results in one database query.
@@ -48,9 +52,9 @@ def set_tagset(tagger, target, tags):
         todelete = todelete.exclude(name=name)
     todelete.delete()
 
-    # All remaining tags in the database for this TagSet match tags in the new set.
-    # However, we don't know if the confidence has changed. Grab them in a single
-    # query and only save the ones that changed.
+    # All remaining tags in the database for this TagSet match tags in the new
+    # set. However, we don't know if the confidence has changed. Grab them in a
+    # single query and only save the ones that changed.
     existing = Tag.objects.filter(tagset=tagset)
     for t in existing:
         if t.confidence != tags[t.name]:

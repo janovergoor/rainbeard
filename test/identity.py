@@ -16,12 +16,15 @@ class SimpleIdentityTestcase(TestCase):
         # Make some accounts
         account.register_user('alice', 'alicepass', 'alice@example.com', False)
         account.register_user('bob', 'bobpass', 'bob@example.com', False)
-        account.register_user('charlie', 'charliepass', 'charlie@example.com', False)
+        account.register_user('charlie', 'charliepass', 'charlie@example.com',
+                              False)
 
     def test_basic(self):
 
         # Get a face that exists
-        self.assertNotEqual(identity.get_face('alice@example.com', 'email', create=False), None)
+        self.assertNotEqual(identity.get_face('alice@example.com', 'email',
+                                              create=False),
+                            None)
 
         # Make 2 face/agent pairs
         foo_face = identity.get_face('foo', 'facebook', create=True)
@@ -45,4 +48,5 @@ class SimpleIdentityTestcase(TestCase):
         self.assertTrue(caught_dne_agent)
 
 def suite():
-    return TestSuite([TestLoader().loadTestsFromTestCase(SimpleIdentityTestcase)])
+    tests = [TestLoader().loadTestsFromTestCase(SimpleIdentityTestcase)]
+    return TestSuite(tests)

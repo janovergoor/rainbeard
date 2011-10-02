@@ -96,8 +96,8 @@ def validate_new_email(email):
     a duplicate email address.
 
     All of the above is really just for robustness/security though. We'd still
-    like to handle the common case with a nice warning rather than an exception.
-    So do that.
+    like to handle the common case with a nice warning rather than an
+    exception. So do that.
     """
     if User.objects.filter(email=email,is_active=True).count() != 0:
         raise forms.ValidationError('The email address provided already ' +

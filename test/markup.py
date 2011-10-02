@@ -35,13 +35,16 @@ class MarkupValidatorTestcase(TestCase):
 
     def test_main_page(self):
         response = self.c.get('/')
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/main.html')
         self.validate_content(response.content)
 
     def test_query_page(self):
         util.make_user('charlie')
-        response = self.c.get('/query?handle=charlie@example.com&service=email')
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/query.html')
+        querystring = '/query?handle=charlie@example.com&service=email'
+        response = self.c.get(querystring)
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/query.html')
         self.validate_content(response.content)
 
 def suite():

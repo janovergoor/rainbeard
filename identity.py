@@ -22,10 +22,12 @@ def get_agent(handle, service, create=False):
     are created. Otherwise, Agent.DoesNotExist is raised.
     """
 
-    # If we're not creating, just do a get(). We want the exception if it's raised.
+    # If we're not creating, just do a get(). We want the exception if it's
+    # raised.
     if not create:
         return Agent.objects.get(handle=handle, service=service)
 
     # If we are creating, give django the option to make the structures.
-    agent, created = Agent.objects.get_or_create(handle=handle, service=service)
+    agent, created = Agent.objects.get_or_create(handle=handle,
+                                                 service=service)
     return agent

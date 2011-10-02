@@ -33,11 +33,12 @@ def register_view(request):
             data = form.cleaned_data
 
             # TODO - send_email=True
-            account.register_user(data['username'], data['password'], data['email'],
-                                  send_email=False)
+            account.register_user(data['username'], data['password'],
+                                  data['email'], send_email=False)
             return HttpResponse('An account for the user ' + data['username'] +
-                                ' has been created. A confirmation link has been sent to ' +
-                                data['email'] + '. You must click the link to activate ' +
+                                ' has been created. A confirmation link has' +
+                                ' been sent to ' + data['email'] +
+                                 '. You must click the link to activate ' +
                                 'your account.')
 
     # Make a blank form if we don't have it.
@@ -45,7 +46,8 @@ def register_view(request):
         form = account.RegForm()
 
     # Display the form.
-    return render_to_response('rainbeard/templates/register.html', {'form' : form})
+    return render_to_response('rainbeard/templates/register.html',
+                              {'form' : form})
 
 def login_view(request, ignored):
 
@@ -72,7 +74,8 @@ def login_view(request, ignored):
         form = account.LoginForm(initial={'next':next})
 
     # Display the form.
-    return render_to_response('rainbeard/templates/login.html', {'form' : form})
+    return render_to_response('rainbeard/templates/login.html',
+                              {'form' : form})
 
 def logout_view(request):
     logout(request)
@@ -93,7 +96,8 @@ def query_view(request):
     # Figure out the source for the profile image.
     picsrc = settings.STATIC_URL + 'blankprofile.jpg';
     if service == "facebook":
-        picsrc = 'https://graph.facebook.com/' + handle + '/picture?type=large';
+        picsrc = 'https://graph.facebook.com/' + handle + \
+                 '/picture?type=large';
 
     context = {'service' : service,
                'handle' : handle,

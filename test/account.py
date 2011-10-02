@@ -17,7 +17,8 @@ class SimpleAccountTestcase(TestCase):
         # Make some accounts.
         account.register_user('alice', 'alicepass', 'alice@example.com', False)
         account.register_user('bob', 'bobpass', 'bob@example.com', False)
-        account.register_user('charlie', 'charliepass', 'charlie@example.com', False)
+        account.register_user('charlie', 'charliepass', 'charlie@example.com',
+                              False)
 
     def test_basic(self):
 
@@ -34,19 +35,22 @@ class SimpleAccountTestcase(TestCase):
         # Claim the email used in registration.
         bobuser = User.objects.get(username='bob')
         self.assertFalse(bobuser.is_active)
-        face = account.do_claim(PendingClaim.objects.get(claimer=bobuser.get_profile()).ckey)
+        ckey = PendingClaim.objects.get(claimer=bobuser.get_profile()).ckey
+        face = account.do_claim(ckey)
         self.assertEqual(face.owner.user, bobuser)
         self.assertTrue(User.objects.get(username='bob').is_active)
 
     def test_bad_claim(self):
 
         # Claim with a nonexistant key.
-        agent = account.do_claim(''.join('f' for x in range(common.ckey_length)))
+        badkey = ''.join('f' for x in range(common.ckey_length))
+        agent = account.do_claim(badkey)
         self.assertEqual(agent, None)
 
 class UIAccountTestcase(TestCase):
-    """Unit test class to Create accounts and log in through the web interface."""
-
+    """
+    Unit test class to Create accounts and log in through the web interface.
+    """
     def setUp(self):
 
         # Create some accounts.
@@ -55,10 +59,11 @@ class UIAccountTestcase(TestCase):
 
     def test_good_registration(self):
         self.assertEqual(User.objects.filter(username='charlie').count(), 0)
-        response = Client().post('/register', {'username': 'charlie',
-                                               'email': 'charlie@example.com',
-                                               'password': 'pass',
-                                               'password_confirmation': 'pass'})
+        response = Client().post('/register',
+                                 {'username': 'charlie',
+                                  'email': 'charlie@example.com',
+                                  'password': 'pass',
+                                  'password_confirmation': 'pass'})
         self.assertEqual(User.objects.filter(username='charlie').count(), 1)
 
     #
@@ -66,30 +71,33 @@ class UIAccountTestcase(TestCase):
     #
 
     def test_preexisting_username(self):
-        response = Client().post('/register', {'username': 'alice',
-                                               'email': 'alice@example.com',
-                                               'password': 'pass',
-                                               'password_confirmation': 'pass'})
+        response = Client().post('/register',
+                                 {'username': 'alice',
+                                  'email': 'alice@example.com',
+                                  'password': 'pass',
+                                  'password_confirmation': 'pass'})
         errors = response.context['form'].errors
         self.assertTrue('username' in response.context['form'].errors)
         self.assertTrue('email' not in response.context['form'].errors)
         self.assertEqual(len(response.context['form'].non_field_errors()), 0)
 
     def test_claimed_email(self):
-        response = Client().post('/register', {'username': 'bobster',
-                                               'email': 'bob@example.com',
-                                               'password': 'pass',
-                                               'password_confirmation': 'pass'})
+        response = Client().post('/register',
+                                 {'username': 'bobster',
+                                  'email': 'bob@example.com',
+                                  'password': 'pass',
+                                  'password_confirmation': 'pass'})
         errors = response.context['form'].errors
         self.assertTrue('username' not in response.context['form'].errors)
         self.assertTrue('email' in response.context['form'].errors)
         self.assertEqual(len(response.context['form'].non_field_errors()), 0)
 
     def test_password_mismatch(self):
-        response = Client().post('/register', {'username': 'bobster',
-                                               'email': 'bobster@example.com',
-                                               'password': 'pass',
-                                               'password_confirmation': 'paste'})
+        response = Client().post('/register',
+                                 {'username': 'bobster',
+                                  'email': 'bobster@example.com',
+                                  'password': 'pass',
+                                  'password_confirmation': 'paste'})
         errors = response.context['form'].errors
         self.assertTrue('username' not in response.context['form'].errors)
         self.assertTrue('email' not in response.context['form'].errors)
@@ -107,48 +115,58 @@ class UIAccountTestcase(TestCase):
 
         # Log in.
         response = Client().get('/', follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/login.html')
         response = response.client.post('/login', {'username': 'bob',
                                                    'password': 'bobpass',
                                                    'next': '/'},
                                         follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/main.html')
 
         # Make sure we can't get back to the login page.
         response = response.client.get('/login', follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/main.html')
 
         # Make sure we can't get to the registration page.
         response = response.client.get('/register', follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/main.html')
 
         # Log out.
         response = response.client.get('/logout')
         response = Client().get('/', follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/login.html')
 
 
     def test_bad_password_login(self):
         """Tests an incorrect password."""
 
         response = Client().get('/', follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/login.html')
         response = response.client.post('/login', {'username': 'bob',
                                                    'password': 'badpass',
                                                    'next': '/'},
                                         follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/login.html')
 
     def test_inactive_login(self):
         response = Client().get('/', follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/login.html')
         response = response.client.post('/login', {'username': 'alice',
                                                    'password': 'alicepass',
                                                    'next': '/'},
                                         follow=True)
-        self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
+        self.assertEqual(response.templates[0].name,
+                         'rainbeard/templates/login.html')
         self.assertEqual(len(response.context['form'].non_field_errors()), 1)
 
 def suite():
-    return TestSuite([TestLoader().loadTestsFromTestCase(SimpleAccountTestcase),
-                      TestLoader().loadTestsFromTestCase(UIAccountTestcase)])
+    tests = [TestLoader().loadTestsFromTestCase(SimpleAccountTestcase),
+             TestLoader().loadTestsFromTestCase(UIAccountTestcase)]
+    return TestSuite(tests)

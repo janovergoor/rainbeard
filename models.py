@@ -97,8 +97,8 @@ class Agent(models.Model):
     ('alice@example.com', 'email') and ('bob.baz', 'facebook').
     """
 
-    # Username on the given service. For example, jane.doe for the user jane.doe
-    # on Facebook, and jane.doe@gmail.com for said email address.
+    # Username on the given service. For example, jane.doe for the user
+    # jane.doe on Facebook, and jane.doe@gmail.com for said email address.
     handle = models.CharField(max_length=100,validators=[validate_handle])
 
     # Name of service where this handle originates.
@@ -172,7 +172,8 @@ class ConfidantLink(models.Model):
 
     # Propagation coefficient - how much does information through this link
     # propagate?
-    prop_coef = models.PositiveSmallIntegerField(validators=[validate_prop_coef])
+    prop_coef = models.PositiveSmallIntegerField(validators=[
+                                                   validate_prop_coef])
 
 class TagSet(models.Model):
     """Data model for a collection of tags placed on a face."""
@@ -200,7 +201,8 @@ class Tag(models.Model):
     name = models.SlugField(max_length=40)
 
     # Confidence given to the tag
-    confidence = models.PositiveSmallIntegerField(validators=[validate_confidence])
+    confidence = models.PositiveSmallIntegerField(validators=[
+                                                    validate_confidence])
 
     # TagSet this tag corresponds to
     tagset = models.ForeignKey(TagSet)

@@ -20,7 +20,8 @@ class SimpleTaggingTestcase(TestCase):
         # Make some accounts.
         aliceuser = util.make_user('alice', 'alicepass', 'alice@example.com')
         bobuser = util.make_user('bob', 'bobpass', 'bob@example.org')
-        charlieuser = util.make_user('charlie', 'charliepass', 'charlie@example.com')
+        charlieuser = util.make_user('charlie', 'charliepass',
+                                     'charlie@example.com')
 
         # Cache their identities.
         self.face_alice = aliceuser.get_profile().active_face()
@@ -29,7 +30,8 @@ class SimpleTaggingTestcase(TestCase):
 
         # Set some tags.
         self.tags_alicetobob = {'trustworthy': 7, 'funny': 3, 'reliable': 5}
-        tagging.set_tagset(self.face_alice, self.face_bob, self.tags_alicetobob)
+        tagging.set_tagset(self.face_alice, self.face_bob,
+                           self.tags_alicetobob)
 
 
     def test_basic(self):
@@ -45,8 +47,12 @@ class SimpleTaggingTestcase(TestCase):
         tagging.set_tagset(self.face_charlie, self.face_alice, {})
 
         # Verify.
-        self.assertEqual(tagging.get_tagset(self.face_charlie, self.face_alice), {})
-        self.assertEqual(tagging.get_tagset(self.face_charlie, self.face_bob), {})
+        self.assertEqual(tagging.get_tagset(self.face_charlie,
+                                            self.face_alice),
+                         {})
+        self.assertEqual(tagging.get_tagset(self.face_charlie,
+                                            self.face_bob),
+                         {})
 
 
     def test_bidirectional(self):
@@ -69,7 +75,8 @@ class SimpleTaggingTestcase(TestCase):
         self.tags_alicetobob['fat'] = 9
 
         # Write.
-        tagging.set_tagset(self.face_alice, self.face_bob, self.tags_alicetobob)
+        tagging.set_tagset(self.face_alice, self.face_bob,
+                           self.tags_alicetobob)
 
         # Verify.
         self.assertEqual(tagging.get_tagset(self.face_alice, self.face_bob),
@@ -81,7 +88,8 @@ class SimpleTaggingTestcase(TestCase):
         del self.tags_alicetobob['trustworthy']
 
         # Write.
-        tagging.set_tagset(self.face_alice, self.face_bob, self.tags_alicetobob)
+        tagging.set_tagset(self.face_alice, self.face_bob,
+                           self.tags_alicetobob)
 
         # Verify.
         self.assertEqual(tagging.get_tagset(self.face_alice, self.face_bob),
@@ -93,7 +101,8 @@ class SimpleTaggingTestcase(TestCase):
         self.tags_alicetobob['reliable'] = 1
 
         # Write.
-        tagging.set_tagset(self.face_alice, self.face_bob, self.tags_alicetobob)
+        tagging.set_tagset(self.face_alice, self.face_bob,
+                           self.tags_alicetobob)
 
         # Verify.
         self.assertEqual(tagging.get_tagset(self.face_alice, self.face_bob),
@@ -107,7 +116,8 @@ class SimpleTaggingTestcase(TestCase):
         self.tags_alicetobob['reliable'] = 1
 
         # Write.
-        tagging.set_tagset(self.face_alice, self.face_bob, self.tags_alicetobob)
+        tagging.set_tagset(self.face_alice, self.face_bob,
+                           self.tags_alicetobob)
 
         # Verify.
         self.assertEqual(tagging.get_tagset(self.face_alice, self.face_bob),
@@ -126,7 +136,8 @@ class AjaxTaggingTestcase(TestCase):
         # Set some tags.
         self.tags_alicetobob = {'trustworthy': 7, 'funny': 3, 'reliable': 5}
         tagging.set_tagset(aliceuser.get_profile().active_face(),
-                           bobuser.get_profile().active_face(), self.tags_alicetobob)
+                           bobuser.get_profile().active_face(),
+                           self.tags_alicetobob)
 
 
     def test_basic(self):
@@ -136,8 +147,9 @@ class AjaxTaggingTestcase(TestCase):
         client.login(username='alice', password='alicepass')
 
         # Make the ajax request.
-        response = client.post('/ajax/givens/get', {'handle': 'bob@example.org',
-                                                    'service': 'email'})
+        response = client.post('/ajax/givens/get',
+                                {'handle': 'bob@example.org',
+                                 'service': 'email'})
 
         # Parse.
         tags = json.loads(response.content)['tags']
@@ -146,5 +158,6 @@ class AjaxTaggingTestcase(TestCase):
         self.assertEqual(tags, self.tags_alicetobob)
 
 def suite():
-    return TestSuite([TestLoader().loadTestsFromTestCase(SimpleTaggingTestcase),
-                      TestLoader().loadTestsFromTestCase(AjaxTaggingTestcase)])
+    tests = [TestLoader().loadTestsFromTestCase(SimpleTaggingTestcase),
+             TestLoader().loadTestsFromTestCase(AjaxTaggingTestcase)]
+    return TestSuite(tests)
