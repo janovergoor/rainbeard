@@ -10,6 +10,7 @@ from rainbeard import account
 from rainbeard.models import *
 import util
 
+
 class SimpleAccountTestcase(TestCase):
 
     def setUp(self):
@@ -46,6 +47,7 @@ class SimpleAccountTestcase(TestCase):
         badkey = ''.join('f' for x in range(common.ckey_length))
         agent = account.do_claim(badkey)
         self.assertEqual(agent, None)
+
 
 class UIAccountTestcase(TestCase):
     """
@@ -103,7 +105,6 @@ class UIAccountTestcase(TestCase):
         self.assertTrue('email' not in response.context['form'].errors)
         self.assertEqual(len(response.context['form'].non_field_errors()), 1)
 
-
     def test_next_url(self):
         """Test 'next' url tracking."""
 
@@ -140,7 +141,6 @@ class UIAccountTestcase(TestCase):
         self.assertEqual(response.templates[0].name,
                          'rainbeard/templates/login.html')
 
-
     def test_bad_password_login(self):
         """Tests an incorrect password."""
 
@@ -165,6 +165,7 @@ class UIAccountTestcase(TestCase):
         self.assertEqual(response.templates[0].name,
                          'rainbeard/templates/login.html')
         self.assertEqual(len(response.context['form'].non_field_errors()), 1)
+
 
 def suite():
     tests = [TestLoader().loadTestsFromTestCase(SimpleAccountTestcase),

@@ -7,6 +7,7 @@ import identity
 import tagging
 from rainbeard.models import *
 
+
 # Handy decorator to make sure the user is logged in and do various
 # checking. Accepts a set of the parameters the function expects.
 class check_ajax(object):
@@ -19,6 +20,7 @@ class check_ajax(object):
     """
     def __init__(self, paramset):
         self.paramset = paramset
+
     def __call__(self, f):
 
         def wrapped_f(*args):
@@ -45,6 +47,7 @@ class check_ajax(object):
             return f(*args);
 
         return wrapped_f
+
 
 @check_ajax(set(('handle', 'service')))
 def get_givens(request):

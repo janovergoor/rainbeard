@@ -2,6 +2,7 @@
 
 from models import *
 
+
 def get_tagset(tagger, target):
     """
     Gets the tagset that 'tagger' has placed on 'target'.

@@ -33,13 +33,11 @@ class SimpleTaggingTestcase(TestCase):
         tagging.set_tagset(self.face_alice, self.face_bob,
                            self.tags_alicetobob)
 
-
     def test_basic(self):
 
         # Read the tags back and verify.
         self.assertEqual(tagging.get_tagset(self.face_alice, self.face_bob),
                          self.tags_alicetobob)
-
 
     def test_empty(self):
 
@@ -54,7 +52,6 @@ class SimpleTaggingTestcase(TestCase):
                                             self.face_bob),
                          {})
 
-
     def test_bidirectional(self):
 
         # Set some other tags from bob to alice.
@@ -66,7 +63,6 @@ class SimpleTaggingTestcase(TestCase):
                          self.tags_alicetobob)
         self.assertEqual(tagging.get_tagset(self.face_bob, self.face_alice),
                          tags_bobtoalice)
-
 
     def test_add(self):
 
@@ -139,7 +135,6 @@ class AjaxTaggingTestcase(TestCase):
                            bobuser.get_profile().active_face(),
                            self.tags_alicetobob)
 
-
     def test_basic(self):
 
         # Log in.
@@ -156,6 +151,7 @@ class AjaxTaggingTestcase(TestCase):
 
         # Verify.
         self.assertEqual(tags, self.tags_alicetobob)
+
 
 def suite():
     tests = [TestLoader().loadTestsFromTestCase(SimpleTaggingTestcase),

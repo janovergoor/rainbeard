@@ -8,6 +8,7 @@ import validators
 import identity
 from models import *
 
+
 # TODO - Should this be a transaction?
 def register_user(username, password, email, send_email=True):
     """
@@ -78,6 +79,7 @@ def request_claim(claimer, face, quiet=False):
 
     # All done!
     return claim
+
 
 def do_claim(ckey):
     """

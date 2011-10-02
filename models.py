@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 import common
 from validators import *
 
+
 class Profile(models.Model):
     """
     Profile data model.
@@ -37,6 +38,7 @@ class Profile(models.Model):
             return Face.objects.get(owner=self, is_active=True)
         except Face.DoesNotExist:
             return None
+
 
 class Face(models.Model):
     """
@@ -115,6 +117,7 @@ class Agent(models.Model):
     class Meta:
         unique_together = (('handle', 'service'))
 
+
 class PendingClaim(models.Model):
     """
     Pending Claim data model.
@@ -174,6 +177,7 @@ class ConfidantLink(models.Model):
     # propagate?
     prop_coef = models.PositiveSmallIntegerField(validators=[
                                                    validate_prop_coef])
+
 
 class TagSet(models.Model):
     """Data model for a collection of tags placed on a face."""

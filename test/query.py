@@ -24,5 +24,6 @@ class SimpleQueryTestcase(TestCase):
                                  self.bob.get_profile().active_face())
         self.assertEqual(results['reliable'], 0.5)
 
+
 def suite():
     return TestSuite([TestLoader().loadTestsFromTestCase(SimpleQueryTestcase)])

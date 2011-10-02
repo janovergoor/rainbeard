@@ -9,6 +9,7 @@ from rainbeard import account
 from rainbeard import identity
 from rainbeard.models import *
 
+
 class SimpleIdentityTestcase(TestCase):
 
     def setUp(self):
@@ -46,6 +47,7 @@ class SimpleIdentityTestcase(TestCase):
         # Verify
         self.assertTrue(caught_dne_face)
         self.assertTrue(caught_dne_agent)
+
 
 def suite():
     tests = [TestLoader().loadTestsFromTestCase(SimpleIdentityTestcase)]

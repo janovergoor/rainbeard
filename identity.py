@@ -2,6 +2,7 @@
 
 from models import *
 
+
 def get_face(handle, service, create=False):
     """
     Gets the face corresponding to a (handle, service) tuple.
@@ -13,6 +14,7 @@ def get_face(handle, service, create=False):
         return get_agent(handle, service, create=create).owner
     except Agent.DoesNotExist:
         raise Face.DoesNotExist()
+
 
 def get_agent(handle, service, create=False):
     """

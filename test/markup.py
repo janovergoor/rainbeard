@@ -12,6 +12,7 @@ from tidylib import tidy_document
 
 import util
 
+
 class MarkupValidatorTestcase(TestCase):
 
     def setUp(self):
@@ -46,6 +47,7 @@ class MarkupValidatorTestcase(TestCase):
         self.assertEqual(response.templates[0].name,
                          'rainbeard/templates/query.html')
         self.validate_content(response.content)
+
 
 def suite():
     return TestLoader().loadTestsFromTestCase(MarkupValidatorTestcase)

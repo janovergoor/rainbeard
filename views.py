@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 import account
 
+
 def register_view(request):
 
     # If we're authenticated, don't let us log in again.
@@ -49,6 +50,7 @@ def register_view(request):
     return render_to_response('rainbeard/templates/register.html',
                               {'form' : form})
 
+
 def login_view(request, ignored):
 
     # If we're authenticated, don't let us log in again.
@@ -77,15 +79,18 @@ def login_view(request, ignored):
     return render_to_response('rainbeard/templates/login.html',
                               {'form' : form})
 
+
 def logout_view(request):
     logout(request)
     return redirect('/')
+
 
 @login_required
 def main_view(request):
 
     return render_to_response('rainbeard/templates/main.html',
                               {'username': request.user.username})
+
 
 @login_required
 def query_view(request):

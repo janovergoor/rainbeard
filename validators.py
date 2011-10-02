@@ -15,11 +15,13 @@ import common
 # Agent handles
 validate_handle = RegexValidator('[a-zA-z0-9_&\.\+=]+')
 
+
 def validate_service(service):
     """Validate a service."""
 
     if service not in set(common.services):
         raise ValidationError('Invalid Service')
+
 
 def validate_confidence(confidence):
     """Validate a confidence value."""

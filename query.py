@@ -1,5 +1,6 @@
 """Confidant network query module."""
 
+
 def do_query(source, target):
     """
     Generates a tag cloud about 'target' from the perspective of 'source'.
