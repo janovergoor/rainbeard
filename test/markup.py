@@ -16,7 +16,7 @@ class MarkupValidatorTestcase(TestCase):
 
     def setUp(self):
 
-        # Give us a logged in client
+        # Give us a logged in client.
         user = util.make_user('bob')
         self.c = Client()
         self.c.login(username='bob', password='bobpass')

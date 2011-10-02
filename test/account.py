@@ -14,24 +14,24 @@ class SimpleAccountTestcase(TestCase):
 
     def setUp(self):
 
-        # Make some accounts
+        # Make some accounts.
         account.register_user('alice', 'alicepass', 'alice@example.com', False)
         account.register_user('bob', 'bobpass', 'bob@example.com', False)
         account.register_user('charlie', 'charliepass', 'charlie@example.com', False)
 
     def test_basic(self):
 
-        # Accounts should start inactive
+        # Accounts should start inactive.
         user = User.objects.get(username='alice')
         self.assertFalse(user.is_active)
 
-        # There should be a corresponding profile
+        # There should be a corresponding profile.
         profile = user.get_profile()
         self.assertNotEqual(profile, None)
 
     def test_good_email_claim(self):
 
-        # Claim the email used in registration
+        # Claim the email used in registration.
         bobuser = User.objects.get(username='bob')
         self.assertFalse(bobuser.is_active)
         face = account.do_claim(PendingClaim.objects.get(claimer=bobuser.get_profile()).ckey)
@@ -40,7 +40,7 @@ class SimpleAccountTestcase(TestCase):
 
     def test_bad_claim(self):
 
-        # Claim with a nonexistant key
+        # Claim with a nonexistant key.
         agent = account.do_claim(''.join('f' for x in range(common.ckey_length)))
         self.assertEqual(agent, None)
 
@@ -49,7 +49,7 @@ class UIAccountTestcase(TestCase):
 
     def setUp(self):
 
-        # Create some accounts
+        # Create some accounts.
         account.register_user('alice', 'alicepass', 'alice@example.com', False)
         util.make_user('bob') # make_user activates the user too
 
@@ -62,7 +62,7 @@ class UIAccountTestcase(TestCase):
         self.assertEqual(User.objects.filter(username='charlie').count(), 1)
 
     #
-    # Test all the ways in which we can make faulty accounts
+    # Test all the ways in which we can make faulty accounts.
     #
 
     def test_preexisting_username(self):
@@ -105,7 +105,7 @@ class UIAccountTestcase(TestCase):
 
     def test_good_login(self):
 
-        # Log in
+        # Log in.
         response = Client().get('/', follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')
         response = response.client.post('/login', {'username': 'bob',
@@ -114,15 +114,15 @@ class UIAccountTestcase(TestCase):
                                         follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
 
-        # Make sure we can't get back to the login page
+        # Make sure we can't get back to the login page.
         response = response.client.get('/login', follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
 
-        # Make sure we can't get to the registration page
+        # Make sure we can't get to the registration page.
         response = response.client.get('/register', follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/main.html')
 
-        # Log out
+        # Log out.
         response = response.client.get('/logout')
         response = Client().get('/', follow=True)
         self.assertEqual(response.templates[0].name, 'rainbeard/templates/login.html')

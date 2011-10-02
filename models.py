@@ -79,11 +79,11 @@ class Face(models.Model):
         # get() will throw an exception if anything else is the case.
         old = Face.objects.get(owner=self.owner,is_active=True)
 
-        # Swap
+        # Swap.
         old.is_active = False
         self.is_active = True
 
-        # Save
+        # Save.
         old.save()
         self.save()
 

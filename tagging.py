@@ -18,7 +18,7 @@ def get_tagset(tagger, target):
     except TagSet.DoesNotExist:
         return {}
 
-    # Get the tags
+    # Get the tags.
     tags = Tag.objects.filter(tagset=tagset).values_list('name', 'confidence')
     return dict((k, v) for (k, v) in tags)
 
@@ -38,7 +38,7 @@ def set_tagset(tagger, target, tags):
     # original.
     tags = tags.copy()
 
-    # Get or create the tagset
+    # Get or create the tagset.
     tagset, created = TagSet.objects.get_or_create(tagger=tagger, target=target)
 
     # Remove all tags that aren't in the new set. Note that, thanks to late
