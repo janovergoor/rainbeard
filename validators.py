@@ -20,14 +20,14 @@ def validate_service(service):
     """Validate a service."""
 
     if service not in set(common.services):
-        raise ValidationError('Invalid Service')
+        raise ValidationError("Invalid Service")
 
 
 def validate_confidence(confidence):
     """Validate a confidence value."""
 
     if confidence % 2 == 0 or confidence < 1 or confidence > 9:
-        raise ValidationError('Invalid confidence value')
+        raise ValidationError("Invalid confidence value")
 
 
 def validate_prop_coef(coef):
@@ -44,7 +44,7 @@ def validate_prop_coef(coef):
     4 <-> 1
     """
     if coef < 0 or coef > 4:
-        raise ValidationError('Invalid Propagation Coefficient')
+        raise ValidationError("Invalid Propagation Coefficient")
 
 
 def validate_ajax_params(params):
@@ -59,7 +59,7 @@ def validate_ajax_params(params):
         elif key == 'service':
             validate_service(value)
         else:
-            raise ValidationError('Unknown POST parameter')
+            raise ValidationError("Unknown POST parameter")
 
 
 def validate_new_username(username):
@@ -75,7 +75,7 @@ def validate_new_username(username):
     data integrity will be preserved.
     """
     if User.objects.filter(username=username).count() != 0:
-        raise forms.ValidationError('Username already exists in the system.')
+        raise forms.ValidationError("Username already exists in the system.")
 
 
 def validate_new_email(email):
@@ -102,5 +102,5 @@ def validate_new_email(email):
     exception. So do that.
     """
     if User.objects.filter(email=email, is_active=True).count() != 0:
-        raise forms.ValidationError('The email address provided already ' \
-                                    'exists in the system.')
+        raise forms.ValidationError("The email address provided already " \
+                                    "exists in the system.")

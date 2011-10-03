@@ -30,15 +30,15 @@ class check_ajax(object):
 
             # Make sure that we're authenticated.
             if not request.user.is_authenticated():
-                raise Exception('Not logged in!')
+                raise Exception("Not logged in!")
 
             # Make sure that the request looks right.
             if request.method != 'POST':
-                raise Exception('Wrong kind of request!')
+                raise Exception("Wrong kind of request!")
 
             # Make sure that we have the parameters we want.
             if not self.paramset <= set(request.POST):
-                raise Exception('Wrong ajax parameters!')
+                raise Exception("Wrong ajax parameters!")
 
             # Make sure that the request validates.
             validate_ajax_params(request.POST)

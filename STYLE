@@ -37,3 +37,6 @@ Misc:
   empty line unless the subsequent line is a comment (in which case the need
   for a blank line preceding a comment applies).
 * In non-code context, "Rainbeard' should always be capitalized.
+* Strings designed for human consumption, such as error messages and field
+  descriptions, should be enclosed in double quotes (""). All other strings
+  should be enclosed in single quotes ('').

@@ -73,10 +73,10 @@ class UIAccountTestcase(TestCase):
         # in the response message. This will be going away soon anyway when we
         # switch to django-registration for this stuff.
         self.assertEqual(response.content,
-                         'An account for the user charlie has been created. ' \
-                         'A confirmation link as been sent to ' \
-                         'charlie@example.com. You must click the link to ' \
-                         'activate your account.')
+                         "An account for the user charlie has been created. " \
+                         "A confirmation link as been sent to " \
+                         "charlie@example.com. You must click the link to " \
+                         "activate your account.")
 
     #
     # Test all the ways in which we can make faulty accounts.

@@ -21,8 +21,8 @@ def register_user(username, password, email, send_email=True):
     # While we're at it, make sure that the email address is unclaimed.
     emailface = identity.get_face(email, 'email', create=True)
     if emailface.owner is not None:
-        raise Exception('Trying to register user, but email address %s ' \
-                        'already claimed.', email)
+        raise Exception("Trying to register user, but email address %s " \
+                        "already claimed.", email)
 
     # Create the user account.
     user = User.objects.create_user(username, email, password=password)
@@ -63,7 +63,7 @@ def request_claim(claimer, face, quiet=False):
 
     # The face should be unbound.
     if face.owner != None:
-        raise Exception('Trying to claim a face that already has an owner!')
+        raise Exception("Trying to claim a face that already has an owner!")
 
     # If there's already a pending claim for us, don't do anything.
     if PendingClaim.objects.filter(claimer=claimer, face=face).count() != 0:
@@ -139,10 +139,10 @@ class LoginForm(forms.Form):
             user = authenticate(username=data['username'],
                                 password=data['password'])
             if user is None:
-                raise forms.ValidationError('Invalid login.')
+                raise forms.ValidationError("Invalid login.")
             if not user.is_active:
-                raise forms.ValidationError('This account has not yet been ' \
-                                            'activated or has been disabled.')
+                raise forms.ValidationError("This account has not yet been " \
+                                            "activated or has been disabled.")
 
             # Save the user object so that we don't have to call authenticate()
             # twice.
@@ -155,14 +155,14 @@ class LoginForm(forms.Form):
 class RegForm(forms.Form):
     """Django form for user registration."""
 
-    username = forms.CharField(max_length=30, label='Pick a Username',
+    username = forms.CharField(max_length=30, label="Pick a Username",
                                validators=[validators.validate_new_username])
-    email = forms.EmailField(label='Your Email',
+    email = forms.EmailField(label="Your Email",
                              validators=[validators.validate_new_email])
     password = forms.CharField(widget=forms.PasswordInput(),
-                               label='New Password')
+                               label="New Password")
     password_confirmation = forms.CharField(widget=forms.PasswordInput(),
-                                            label='Confirm Password')
+                                            label="Confirm Password")
 
     def clean(self):
         """Django form validation method. Called automatically."""
@@ -173,7 +173,7 @@ class RegForm(forms.Form):
         # Check that the passwords match.
         if set(('password', 'password_confirmation')) <= set(data):
             if data['password'] != data['password_confirmation']:
-                raise forms.ValidationError('Passwords do not match.')
+                raise forms.ValidationError("Passwords do not match.")
 
         # Return the cleaned data.
         return data

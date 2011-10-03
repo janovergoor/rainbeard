@@ -36,10 +36,10 @@ def register_view(request):
             # TODO - send_email=True
             account.register_user(data['username'], data['password'],
                                   data['email'], send_email=False)
-            return HttpResponse('An account for the user %s has been ' \
-                                'created. A confirmation link as been sent ' \
-                                'to %s. You must click the link to activate ' \
-                                'your account.' %
+            return HttpResponse("An account for the user %s has been " \
+                                "created. A confirmation link as been sent " \
+                                "to %s. You must click the link to activate " \
+                                "your account." %
                                 (data['username'], data['email']))
 
     # Make a blank form if we don't have it.

@@ -71,7 +71,7 @@ class Face(models.Model):
 
         # Unbound? Error
         if owner is None:
-            raise Exception('Calling activate() on unbound face!')
+            raise Exception("Calling activate() on unbound face!")
 
         # Already active? No-op.
         if self.is_active:
