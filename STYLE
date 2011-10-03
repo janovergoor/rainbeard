@@ -10,6 +10,13 @@ described in PEP 8 (and, consequently, PEP 257):
 * http://www.python.org/dev/peps/pep-0008/
 * http://www.python.org/dev/peps/pep-0257/
 
+The test suite runs a PEP 8 validator over the entire source tree, which
+enforces (a reasonable subset of) the PEP 8 style guidelines. Occasionally,
+exceptions are somewhat warranted and it's an inconvenience to make the
+validator happy. But thus far, the validator has behaved quite reasonably, and
+we haven't found a compelling enough reason to turn it off. 99% of what it
+finds are things that should be fixed!
+
 We make the following exceptions to the PEP guidelines:
 * Method docstrings are written with a descriptive voice rather than an active
   voice. For example, the docstring for a method called create_foo() would be
