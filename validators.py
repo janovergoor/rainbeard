@@ -102,5 +102,5 @@ def validate_new_email(email):
     exception. So do that.
     """
     if User.objects.filter(email=email, is_active=True).count() != 0:
-        raise forms.ValidationError('The email address provided already ' +
+        raise forms.ValidationError('The email address provided already ' \
                                     'exists in the system.')

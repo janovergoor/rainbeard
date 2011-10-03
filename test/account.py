@@ -68,6 +68,16 @@ class UIAccountTestcase(TestCase):
                                   'password_confirmation': 'pass'})
         self.assertEqual(User.objects.filter(username='charlie').count(), 1)
 
+        # It's a little bit lame to hardcore the response message here, but
+        # it's the only way we'll notice if we bust the string interpolation
+        # in the response message. This will be going away soon anyway when we
+        # switch to django-registration for this stuff.
+        self.assertEqual(response.content,
+                         'An account for the user charlie has been created. ' \
+                         'A confirmation link as been sent to ' \
+                         'charlie@example.com. You must click the link to ' \
+                         'activate your account.')
+
     #
     # Test all the ways in which we can make faulty accounts.
     #

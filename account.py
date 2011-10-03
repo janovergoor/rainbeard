@@ -21,8 +21,8 @@ def register_user(username, password, email, send_email=True):
     # While we're at it, make sure that the email address is unclaimed.
     emailface = identity.get_face(email, 'email', create=True)
     if emailface.owner is not None:
-        raise Exception('Trying to register user, but email address ' + email +
-                        ' already claimed.')
+        raise Exception('Trying to register user, but email address %s ' \
+                        'already claimed.', email)
 
     # Create the user account.
     user = User.objects.create_user(username, email, password=password)
@@ -141,7 +141,7 @@ class LoginForm(forms.Form):
             if user is None:
                 raise forms.ValidationError('Invalid login.')
             if not user.is_active:
-                raise forms.ValidationError('This account has not yet been ' +
+                raise forms.ValidationError('This account has not yet been ' \
                                             'activated or has been disabled.')
 
             # Save the user object so that we don't have to call authenticate()

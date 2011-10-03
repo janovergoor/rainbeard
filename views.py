@@ -36,11 +36,11 @@ def register_view(request):
             # TODO - send_email=True
             account.register_user(data['username'], data['password'],
                                   data['email'], send_email=False)
-            return HttpResponse('An account for the user ' + data['username'] +
-                                ' has been created. A confirmation link has' +
-                                ' been sent to ' + data['email'] +
-                                 '. You must click the link to activate ' +
-                                'your account.')
+            return HttpResponse('An account for the user %s has been ' \
+                                'created. A confirmation link as been sent ' \
+                                'to %s. You must click the link to activate ' \
+                                'your account.' %
+                                (data['username'], data['email']))
 
     # Make a blank form if we don't have it.
     else:
@@ -99,10 +99,9 @@ def query_view(request):
     handle = request.GET['handle']
 
     # Figure out the source for the profile image.
-    picsrc = settings.STATIC_URL + 'blankprofile.jpg'
+    picsrc = '%sblankprofile.jpg' % settings.STATIC_URL
     if service == "facebook":
-        picsrc = 'https://graph.facebook.com/' + handle + \
-                 '/picture?type=large'
+        picsrc = 'https://graph.facebook.com/%s/picture?type=large' % handle
 
     context = {'service': service,
                'handle': handle,
