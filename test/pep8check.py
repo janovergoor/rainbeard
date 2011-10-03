@@ -18,7 +18,7 @@ class PEP8ValidatorTestcase(TestCase):
 
     def test_style(self):
         """
-        Runs the rainbeard code through pep8.py.
+        Runs the Rainbeard code through pep8.py.
 
         This is a bit sketchy, since pep8.py is desiged to be run as a
         command-line utility, and doesn't seem to have given much thought to

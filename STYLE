@@ -36,3 +36,4 @@ Misc:
   docstrings end with the """ on a separate line, and are not followed by an
   empty line unless the subsequent line is a comment (in which case the need
   for a blank line preceding a comment applies).
+* In non-code context, "Rainbeard' should always be capitalized.

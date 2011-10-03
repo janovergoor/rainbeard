@@ -29,7 +29,7 @@ def register_user(username, password, email, send_email=True):
     user.is_active = False
     user.save()
 
-    # Create the user profile (extra rainbeard-specific user data).
+    # Create the user profile (extra Rainbeard-specific user data).
     profile = Profile(user=user)
     profile.save()
 
