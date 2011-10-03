@@ -5,7 +5,7 @@ from django.utils import simplejson as json
 
 import identity
 import tagging
-from rainbeard.models import *
+from models import *
 
 
 # Handy decorator to make sure the user is logged in and do various
